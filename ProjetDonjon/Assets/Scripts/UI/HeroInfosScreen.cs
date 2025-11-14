@@ -77,12 +77,12 @@ public class HeroInfosScreen : MonoBehaviour
 
         Vector3 pos1 = goLeft ? new Vector3(-800, 0, 0) : new Vector3(800, 0, 0);
         Quaternion rot1 = goLeft ? Quaternion.Euler(0, 0, 15) : Quaternion.Euler(0, 0, -15);
-        currentInventory.RectTransform.UChangeLocalPosition(0.2f, pos1, CurveType.EaseInCubic);
-        currentInventory.RectTransform.UChangeLocalRotation(0.2f, rot1, CurveType.EaseInCubic);
-        currentInventory.LootParent.UChangeLocalPosition(0.2f, pos1, CurveType.EaseInCubic);
-        currentInventory.LootParent.UChangeLocalRotation(0.2f, rot1, CurveType.EaseInCubic);
-        _mainRectParent.UChangeLocalPosition(0.2f, pos1, CurveType.EaseInCubic);
-        _mainRectParent.UChangeLocalRotation(0.2f, rot1, CurveType.EaseInCubic);
+        currentInventory.RectTransform.DOLocalMove(pos1, 0.2f).SetEase(Ease.InCubic);
+        currentInventory.RectTransform.DOLocalRotate(rot1.eulerAngles, 0.2f).SetEase(Ease.InCubic);
+        currentInventory.LootParent.DOLocalMove(pos1, 0.2f).SetEase(Ease.InCubic);
+        currentInventory.LootParent.DOLocalRotate(rot1.eulerAngles, 0.2f).SetEase(Ease.InCubic);
+        _mainRectParent.DOLocalMove(pos1, 0.2f).SetEase(Ease.InCubic);
+        _mainRectParent.DOLocalRotate(rot1.eulerAngles, 0.2f).SetEase(Ease.InCubic);
 
         yield return new WaitForSeconds(0.2f);
 
@@ -148,6 +148,7 @@ public class HeroInfosScreen : MonoBehaviour
     {
         isOpenning = true;
 
+        InventoriesManager.Instance.InventoryActionPanel.ClosePanel();
         HeroesManager.Instance.Heroes[HeroesManager.Instance.CurrentHeroIndex].Controller.RestartControl();
 
         OnHide.Invoke();

@@ -18,7 +18,7 @@ MonoBehaviour:
   enviroDangerText: LOW
   enviroIllustration: {fileID: 7975086727044346999, guid: a70726b90ea81ae4ebcea3b9fc470dce, type: 3}
   enviroIndex: 0
-  recommandedLevels: 010000000200000003000000040000000500000006000000
+  recommandedLevels: 010000000200000004000000050000000600000008000000
   minDistGoldenPath: 5
   maxDistGoldenPath: 7
   minRoomAmount: 7

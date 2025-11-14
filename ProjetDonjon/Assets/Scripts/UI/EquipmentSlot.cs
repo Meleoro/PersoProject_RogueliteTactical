@@ -86,7 +86,11 @@ public class EquipmentSlot : MonoBehaviour
 
         equipedLoot = addedLoot;
 
-        if(callAction) OnEquipmentAdd?.Invoke(addedLoot, slotIndex);
+        if (callAction) 
+        {
+            AudioManager.Instance.PlaySoundOneShot(0, 2);
+            OnEquipmentAdd?.Invoke(addedLoot, slotIndex); 
+        }
     }
 
 
@@ -102,6 +106,8 @@ public class EquipmentSlot : MonoBehaviour
         {
             if (equipedLoot)
                 equipedLoot.Unequip();
+
+            AudioManager.Instance.PlaySoundOneShot(0, 3);
 
             OnEquipmentRemove?.Invoke(equipedLoot, slotIndex); 
         }

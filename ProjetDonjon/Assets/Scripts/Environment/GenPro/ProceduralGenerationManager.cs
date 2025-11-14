@@ -120,6 +120,8 @@ public class ProceduralGenerationManager : GenericSingletonClass<ProceduralGener
 
     public void GenerateBossFloor(bool isFirstBoss)
     {
+        generatedRooms = new List<Room>();
+
         Room[] possibleBossRooms = isFirstBoss ? enviroData.possibleFirstBossRooms : enviroData.possibleSecondBossRooms;
 
         AddRoom(new Vector2Int(4, 4), enviroData.possibleStartRooms[Random.Range(0, enviroData.possibleStartRooms.Length)]);

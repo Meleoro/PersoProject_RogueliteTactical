@@ -78,7 +78,7 @@ public class EquippableSkill : MonoBehaviour
     }
 
 
-    public void Equip()
+    public void Equip(bool playSound = false)
     {
         isEquipped = true;
 
@@ -87,9 +87,11 @@ public class EquippableSkill : MonoBehaviour
 
         _skillIcon.DOColor(highlightIconColor, 0.15f).SetEase(Ease.OutCubic);
         _skillIcon.rectTransform.DOScale(Vector3.one * 1.05f, 0.15f).SetEase(Ease.OutElastic);
+
+        if (playSound) AudioManager.Instance.PlaySoundOneShot(0, 4);
     }
 
-    public void Unequip()
+    public void Unequip(bool playSound = false)
     {
         isEquipped = false;
 
@@ -99,6 +101,8 @@ public class EquippableSkill : MonoBehaviour
         _skillIcon.DOComplete();
         _skillIcon.color = Color.white;
         _skillIcon.rectTransform.localScale = Vector3.one;
+
+        if(playSound) AudioManager.Instance.PlaySoundOneShot(0, 5);
     }
 
 
@@ -111,6 +115,8 @@ public class EquippableSkill : MonoBehaviour
         _mainRectTr.DOScale(Vector3.one * 1.05f, 0.15f).SetEase(Ease.OutCubic);
         _mainImage.DOColor(hoveredColor, 0.2f).SetEase(Ease.OutCubic);
         _buttonText.DOColor(hoveredTextColor, 0.2f).SetEase(Ease.OutCubic);
+
+        AudioManager.Instance.PlaySoundOneShotRandomPitch(0.9f, 1.1f, 0, 0);
 
         StartCoroutine(AdaptHeightCoroutine(70, 75, 0.15f));
     }

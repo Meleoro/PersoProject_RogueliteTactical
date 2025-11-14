@@ -200,12 +200,6 @@ public class SkillTreeNode : MonoBehaviour
         _rectTr.localScale = currentScale;
     }
 
-    public void HoverNode()
-    {
-        OnHover.Invoke(this);
-
-        hoverCoroutine = StartCoroutine(HoverNodeCoroutine());
-    }
 
     private IEnumerator HoverNodeCoroutine()
     {
@@ -224,35 +218,6 @@ public class SkillTreeNode : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         _rectTr.UChangeScale(0.2f, currentScale + Vector3.one * 0.2f, CurveType.EaseInOutSin);
-    }
-
-
-    public void UnhoverNode()
-    {
-        OnUnhover.Invoke(this);
-
-        if(hoverCoroutine != null) StopCoroutine(hoverCoroutine);
-        if (isReachable && !isPossessed) availableCoroutine = StartCoroutine(AvailableEffectCoroutine(0.2f));
-
-        _outlineImage.DOComplete();
-        _iconImage.DOComplete();
-        _mainImage.DOComplete();
-
-        _mainImage.DOColor(currentColor, 0.2f).SetEase(Ease.OutCubic);
-        _iconImage.DOColor(currentOutlineColor, 0.2f).SetEase(Ease.OutCubic);
-        _outlineImage.DOColor(currentOutlineColor, 0.2f).SetEase(Ease.OutCubic);
-
-        _rectTr.UChangeScale(0.2f, currentScale, CurveType.EaseInOutSin);
-    }
-
-    public void ClickNode()
-    {
-        if (!isReachable || isPossessed) return;
-        if (associatedHero.CurrentSkillTreePoints == 0) return;
-
-        OnClickValid.Invoke(this);
-
-        StartCoroutine(ClickNodeEffectCoroutine());
     }
 
 
@@ -286,6 +251,51 @@ public class SkillTreeNode : MonoBehaviour
 
             yield return new WaitForSeconds(0.9f);
         }
+    }
+
+    #endregion
+
+
+    #region Mouse Inputs
+
+    public void HoverNode()
+    {
+        OnHover.Invoke(this);
+
+        AudioManager.Instance.PlaySoundOneShot(0, 0);
+
+        hoverCoroutine = StartCoroutine(HoverNodeCoroutine());
+    }
+
+
+    public void UnhoverNode()
+    {
+        OnUnhover.Invoke(this);
+
+        if (hoverCoroutine != null) StopCoroutine(hoverCoroutine);
+        if (isReachable && !isPossessed) availableCoroutine = StartCoroutine(AvailableEffectCoroutine(0.2f));
+
+        _outlineImage.DOComplete();
+        _iconImage.DOComplete();
+        _mainImage.DOComplete();
+
+        _mainImage.DOColor(currentColor, 0.2f).SetEase(Ease.OutCubic);
+        _iconImage.DOColor(currentOutlineColor, 0.2f).SetEase(Ease.OutCubic);
+        _outlineImage.DOColor(currentOutlineColor, 0.2f).SetEase(Ease.OutCubic);
+
+        _rectTr.UChangeScale(0.2f, currentScale, CurveType.EaseInOutSin);
+    }
+
+    public void ClickNode()
+    {
+        if (!isReachable || isPossessed) return;
+        if (associatedHero.CurrentSkillTreePoints == 0) return;
+
+        AudioManager.Instance.PlaySoundOneShot(0, 1);
+
+        OnClickValid.Invoke(this);
+
+        StartCoroutine(ClickNodeEffectCoroutine());
     }
 
     #endregion

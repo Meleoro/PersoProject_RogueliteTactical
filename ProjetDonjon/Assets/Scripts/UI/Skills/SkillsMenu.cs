@@ -91,11 +91,11 @@ public class SkillsMenu : MonoBehaviour
         if (equippableSkill.IsEquipped)
         {
             Unequip(equippableSkill);
-            equippableSkill.Unequip();
+            equippableSkill.Unequip(true);
         }
         else
         {
-            if (TryEquip(equippableSkill)) equippableSkill.Equip();
+            if (TryEquip(equippableSkill)) equippableSkill.Equip(true);
         }
 
         ActualiseHeroInfos();

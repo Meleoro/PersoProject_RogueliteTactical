@@ -68,6 +68,8 @@ public class InventoryActionPanel : MonoBehaviour
         _buttonsRectTr[index].UChangeScale(0.1f, Vector3.one * 1.1f);
         _buttonsRectTr[index].sizeDelta = new Vector2(_buttonsRectTr[index].sizeDelta.x, 36);
         LayoutRebuilder.ForceRebuildLayoutImmediate(_verticalLayoutGroup.transform as RectTransform);
+
+        AudioManager.Instance.PlaySoundOneShotRandomPitch(0.9f, 1.1f, 0, 0);
     }
 
     public void UnhoverButton(int index)

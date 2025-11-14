@@ -72,6 +72,11 @@ public class BattleManager : GenericSingletonClass<BattleManager>
     private void Update()
     {
         if (!isInBattle) return;
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            EndBattle();    
+        }
     }
 
 
@@ -200,6 +205,11 @@ public class BattleManager : GenericSingletonClass<BattleManager>
         for (int i = 0; i < currentAllies.Count; i++)
         {
             currentAllies[i].TakeDamage(1000, null);
+        }
+
+        for (int i = currentEnemies.Count - 1; i >= 0; i--)
+        {
+            currentEnemies[i].TakeDamage(1000, null);
         }
 
         CameraManager.Instance.ExitBattle();

@@ -412,6 +412,8 @@ public class Loot : MonoBehaviour, IInteractible
         InventoriesManager.Instance.DetailsPanel.LoadDetails(lootData, _imageBackground.transform.position, false);
         InventoriesManager.Instance.HoverLoot(this);
 
+        AudioManager.Instance.PlaySoundOneShot(0, 0);
+
         if (overlayCoroutine is not null) StopCoroutine(overlayCoroutine);
         overlayCoroutine = StartCoroutine(OverlayLootCoroutine(0.1f));
     }
@@ -457,6 +459,8 @@ public class Loot : MonoBehaviour, IInteractible
     public void ClickLoot()
     {
         InventoriesManager.Instance.DetailsPanel.HideDetails();
+
+        AudioManager.Instance.PlaySoundOneShot(0, 1);
 
         InventoriesManager.Instance.InventoryActionPanel.OpenPanel(this);
     }
