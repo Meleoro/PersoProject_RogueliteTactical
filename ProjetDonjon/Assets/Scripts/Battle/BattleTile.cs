@@ -323,6 +323,7 @@ public class BattleTile : MonoBehaviour
         {
             BattleManager.Instance.TilesManager.DisplayPossibleSkillTiles(null, null, false);
         }
+
         else if (BattleManager.Instance.CurrentActionType != MenuType.LaunchSkill)
         {
             // Hides the preview of the possible movement of the tile's current unit if it's possible

@@ -2,8 +2,10 @@ using DG.Tweening;
 using DG.Tweening.Core.Easing;
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Utilities;
 
 public class MainMetaMenu : MonoBehaviour
@@ -15,6 +17,8 @@ public class MainMetaMenu : MonoBehaviour
     private Coroutine hoverCoroutine;
     private Vector2[] saveLocalPosShadows;
     private int unhoveredIndex = -1;
+    private CampLevelData[] campLevels;
+    private int currentCampLevel;
 
     [Header("References")]
     [SerializeField] private RectTransform[] _buttonsRectTr;
@@ -29,6 +33,10 @@ public class MainMetaMenu : MonoBehaviour
     [SerializeField] private RectTransform _leftHiddenPos;
     [SerializeField] private RectTransform _rightHiddenPos;
 
+    [Header("References Camp Lvl")]
+    [SerializeField] private Image _campLevelProgressBar;
+    [SerializeField] private TextMeshProUGUI _campLevelProgressText;
+
 
 
     private void Start()
@@ -39,6 +47,9 @@ public class MainMetaMenu : MonoBehaviour
         {
             saveLocalPosShadows[i] = _shadowsRectTr[i].localPosition;
         }
+
+        campLevels = RelicsManager.Instance.CampLevels;
+        currentCampLevel = RelicsManager.Instance.CurrentCampLevel;
     }
 
 
@@ -185,6 +196,54 @@ public class MainMetaMenu : MonoBehaviour
         _buttonsRectTr[index].DOComplete();
 
         _buttonsRectTr[index].DOScale(Vector3.one * 1f, 0.2f).SetEase(Ease.InOutSine);
+    }
+
+    #endregion
+
+
+    #region Camps Level
+    
+    public void ActualiseCampProgress()
+    {
+        int previousCampLevel = RelicsManager.Instance.CurrentCampLevel;
+        int previousRelicCount = RelicsManager.Instance.CurrentCampRelicCount;
+
+        RelicsManager.Instance.ActualiseCampLevel();
+
+        int newCampLevel = RelicsManager.Instance.CurrentCampLevel;
+        int newRelicCount = RelicsManager.Instance.CurrentCampRelicCount;
+
+        if(newRelicCount != previousRelicCount)
+        {
+            StartCoroutine(PlayProgressCoroutine((float)newRelicCount / campLevels[previousCampLevel].neededRelicCount));
+        }
+    }
+
+    private IEnumerator PlayProgressCoroutine(float endProgress)
+    {
+        _campLevelProgressBar.DOFillAmount(endProgress, 0.5f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        if(endProgress < 1)
+        {
+
+            yield break;
+        }
+
+        _campLevelProgressBar.fillAmount = 0;
+
+        DisplayUnlockWindow(campLevels[currentCampLevel++]);
+    }
+
+    public void DisplayUnlockWindow(CampLevelData newLevelData)
+    {
+        
+    }
+
+    public void HideUnlockWindow()
+    {
+
     }
 
     #endregion

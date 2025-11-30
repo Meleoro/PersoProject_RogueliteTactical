@@ -32,8 +32,6 @@ public class PlayerActionsMenu : MonoBehaviour
     [Header("Private Infos")]
     private Hero currentHero;
     private Color[] colorSaves;
-    private bool movedUnit;
-    private bool usedSkill;
     private bool isOpened;
     private MenuType currentMenu;
 
@@ -77,8 +75,6 @@ public class PlayerActionsMenu : MonoBehaviour
     public void SetupHeroActionsUI(Hero currentHero)
     {
         this.currentHero = currentHero;
-        movedUnit = false;
-        usedSkill = false;
 
         OpenActionsMenu();
     }
@@ -88,13 +84,13 @@ public class PlayerActionsMenu : MonoBehaviour
         if (currentHero.CurrentActionPoints == 0) return;
         if (!BattleManager.Instance.IsInBattle) return;
 
+        CameraManager.Instance.FocusOnTr(currentHero.transform, 5f);
         CameraManager.Instance.OnCameraMouseInput += CloseActionsMenu;
         currentHero.OnClickUnit -= OpenActionsMenu;
+        if (currentMenu == MenuType.Move) currentHero.OnClickUnit -= ReturnPreviousBattleMenu;
 
         currentMenu = MenuType.BaseActions;
         isOpened = true;
-
-        CameraManager.Instance.FocusOnTr(currentHero.transform, 5f);
 
         transform.position = currentHero.transform.position + positionOffset;
         _animator.SetBool("IsOpenned", true);
@@ -140,18 +136,16 @@ public class PlayerActionsMenu : MonoBehaviour
 
     public void StartMoveAction()
     {
-        if (movedUnit || currentHero.IsHindered) return;
+        if (currentHero.IsHindered) return;
 
         currentMenu = MenuType.Move;
-        BattleManager.Instance.TilesManager.DisplayPossibleMoveTiles(currentHero);
+        BattleManager.Instance.TilesManager.DisplayPossibleMoveTiles(currentHero, true);
 
         CloseActionsMenu();
     }
 
     public void StartSkillsAction()
     {
-        if(usedSkill) return;
-
         currentMenu = MenuType.Skills;
         _skillsPanel.OpenSkillsPanel(currentHero);
 
@@ -187,7 +181,7 @@ public class PlayerActionsMenu : MonoBehaviour
 
     public void OverlayButton(int buttonIndex)
     {
-        if (buttonIndex == 0 && (movedUnit || currentHero.IsHindered)) return;
+        if (buttonIndex == 0 && (currentHero.IsHindered)) return;
 
         _buttonImages[buttonIndex].ULerpImageColor(0.1f, colorSaves[buttonIndex] + overlayActionAddedColor);
         _buttonImages[buttonIndex].rectTransform.UChangeScale(0.1f, Vector3.one * 1.05f);
@@ -200,7 +194,7 @@ public class PlayerActionsMenu : MonoBehaviour
 
     public void QuitOverlayButton(int buttonIndex)
     {
-        if (buttonIndex == 0 && movedUnit || currentHero.IsHindered) return;
+        if (buttonIndex == 0 && currentHero.IsHindered) return;
 
         _buttonImages[buttonIndex].rectTransform.UStopChangeScale();
 
@@ -215,7 +209,7 @@ public class PlayerActionsMenu : MonoBehaviour
 
     public void QuitOverlayButtonInstant(int buttonIndex)
     {
-        if (buttonIndex == 0 && movedUnit || currentHero.IsHindered) return;
+        if (buttonIndex == 0 && currentHero.IsHindered) return;
 
         _buttonImages[buttonIndex].color = colorSaves[buttonIndex];
         _buttonImages[buttonIndex].rectTransform.localScale = Vector3.one;

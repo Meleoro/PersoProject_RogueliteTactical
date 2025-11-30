@@ -30,14 +30,12 @@ public class HeroesManager : GenericSingletonClass<HeroesManager>, ISaveable
     private bool isInvincible;
     private bool noControl;
 
-
     [Header("Public Saveable Infos")]
     public int[] HeroesLevel { get; private set; }
     public bool[] HeroesUnlockedNodes { get; private set; }
     public int[] HeroesCurrentSkillTreePoint { get; private set; }
     public string[] HeroesEquippedSkillNames { get; private set; }
     public string[] HeroesEquippedPassiveNames { get; private set; }
-
 
     [Header("References")]
     [SerializeField] private InteractionManager _interactionManager;

@@ -20,6 +20,9 @@ public class HeroController : MonoBehaviour
     [SerializeField] private float holdJumpForce;
     [SerializeField] private float holdJumpDuration;
 
+    [Header("Actions")]
+    public Action EndAutoMoveAction;
+
     [Header("Private Infos")]
     private ControllerState currentControllerState;
     private bool isInBattle;
@@ -27,6 +30,7 @@ public class HeroController : MonoBehaviour
     private bool isAutoMoving;
     private Vector2 saveSpriteLocalPos;
     private Vector2 oldPos;
+    private Vector2 shadowOffset;
     public List<Vector3> savePositions = new List<Vector3>();
     private Coroutine autoMoveCoroutine;
 
@@ -39,6 +43,7 @@ public class HeroController : MonoBehaviour
     [SerializeField] private ParticleSystem _walkParticleSystem;
     [SerializeField] private ParticleSystem _landParticleSystem;
     [SerializeField] private Transform _spriteParent;
+    [SerializeField] private Transform _shadowTr;
     private Rigidbody2D _rb;
 
 
@@ -48,6 +53,8 @@ public class HeroController : MonoBehaviour
 
         saveSpriteLocalPos = _rbSprite.transform.localPosition;
         savePositions.Add(transform.position);
+
+        shadowOffset = _shadowTr.transform.localPosition;
     }
 
 
@@ -127,16 +134,19 @@ public class HeroController : MonoBehaviour
 
     private void Rotate(Vector2 inputDir)
     {
-        if(inputDir.x < -0.01)
+        if(shadowOffset == Vector2.zero) shadowOffset = _shadowTr.transform.localPosition;
+
+        if (inputDir.x < -0.01)
         {
             _spriteParent.rotation = Quaternion.Euler(0, 180, 0);
+            _shadowTr.localPosition = shadowOffset * new Vector2(-1, 1);
         }
         else if(inputDir.x > 0.01)
         {
             _spriteParent.rotation = Quaternion.Euler(0, 0, 0);
+            _shadowTr.localPosition = shadowOffset;
         }
     }
-
 
     public void AutoMove(Vector3 aimedPos)
     {
@@ -158,6 +168,7 @@ public class HeroController : MonoBehaviour
 
         transform.position = aimedPos;
         transform.rotation = Quaternion.Euler(0, 0, 0);
+        _spriteParent.transform.rotation = Quaternion.Euler(0, 0, 0);
         isAutoMoving = false;
     }
 
@@ -171,8 +182,6 @@ public class HeroController : MonoBehaviour
         }
     }
 
-
-    public Action EndAutoMoveAction;
     public IEnumerator AutoMoveCoroutineEndBattle(Transform aimedTr)
     {
         isAutoMoving = true;
@@ -200,6 +209,8 @@ public class HeroController : MonoBehaviour
         currentControllerState = ControllerState.Jump;
 
         oldPos = transform.position;
+
+        AudioManager.Instance.PlaySoundOneShot(1, 3);
 
         _rbSprite.bodyType = RigidbodyType2D.Dynamic;
         _rbSprite.linearVelocity = Vector2.zero;
@@ -256,6 +267,8 @@ public class HeroController : MonoBehaviour
         _animator.SetTrigger("JumpNext");
         _landParticleSystem.Play();
 
+        AudioManager.Instance.PlaySoundOneShot(1, 4);
+
         _rbSprite.transform.localPosition = saveSpriteLocalPos;
         _rbSprite.linearVelocity = Vector2.zero;
         _rbSprite.bodyType = RigidbodyType2D.Kinematic;
@@ -272,6 +285,8 @@ public class HeroController : MonoBehaviour
     {
         currentControllerState = ControllerState.Fall;
         _rb.linearVelocity = Vector2.zero;
+
+        AudioManager.Instance.PlaySoundOneShot(1, 5);
 
         _rbSprite.transform.UChangeScale(0.5f, Vector3.zero, CurveType.EaseInOutSin);
 

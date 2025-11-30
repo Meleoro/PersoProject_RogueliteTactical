@@ -16,10 +16,12 @@ public class TrapSlab : MonoBehaviour
     [Header("Private Infos")]
     private bool isOnCooldown;
     private bool isDeactivated;
+    private Vector3 originalPos;
 
     [Header("References")]
     [SerializeField] Transform[] _triggeredArrowDispensers;
     [SerializeField] Light2D _highlightLight;
+    [SerializeField] AudioSource _audioSource;
     private ParticleSystem[] _dustParticleSystems;
 
 
@@ -27,6 +29,8 @@ public class TrapSlab : MonoBehaviour
     private void Start()
     {
         _dustParticleSystems = new ParticleSystem[_triggeredArrowDispensers.Length];
+
+        originalPos = transform.position;
 
         for (int i = 0; i < _triggeredArrowDispensers.Length; i++)
         {
@@ -36,11 +40,47 @@ public class TrapSlab : MonoBehaviour
     }
 
 
-    #region Chackboard Room
+    private IEnumerator TriggerTrapCoroutine()
+    {
+        isOnCooldown = true;
+        transform.UChangePosition(0.2f, originalPos + Vector3.down * activatePosOffset, CurveType.EaseOutCubic);
+
+        AudioManager.Instance.PlaySoundOneShot(1, 6, 0, _audioSource);
+
+        for(int i = 0; i < _triggeredArrowDispensers.Length; i++)
+        {
+            if (isDeactivated) break;
+
+            Arrow newArrow = Instantiate(arrowPrefab, _triggeredArrowDispensers[i].position, _triggeredArrowDispensers[i].rotation);
+            newArrow.InitialiseArrow(arrowSpeed, arrowDamages);
+
+            AudioManager.Instance.PlaySoundOneShotRandomPitch(0.9f, 1.1f, 1, 7, 0);
+
+            _dustParticleSystems[i].Play();
+        }
+
+        yield return new WaitForSeconds(cooldownDuration);
+
+        isOnCooldown = false;
+        transform.UChangePosition(0.2f, originalPos, CurveType.EaseOutCubic);
+    }
+
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (isOnCooldown) return;
+        if (!collision.CompareTag("Hero")) return;
+        if (collision.GetComponent<HeroController>().CurrentControllerState == ControllerState.Jump) return;
+
+        StartCoroutine(TriggerTrapCoroutine());
+    }
+
+
+    #region Checkboard Room
 
     public void Highlight()
     {
-        _highlightLight.ULerpIntensity(0.2f, 0.5f);
+        _highlightLight.ULerpIntensity(0.2f, 1.5f);
     }
 
     public void StopHighlight()
@@ -54,37 +94,4 @@ public class TrapSlab : MonoBehaviour
     }
 
     #endregion
-
-
-    private IEnumerator TriggerTrapCoroutine()
-    {
-        isOnCooldown = true;
-        transform.UChangePosition(0.2f, transform.position + Vector3.down * activatePosOffset, CurveType.EaseOutCubic);
-
-        for(int i = 0; i < _triggeredArrowDispensers.Length; i++)
-        {
-            if (isDeactivated) break;
-
-            Arrow newArrow = Instantiate(arrowPrefab, _triggeredArrowDispensers[i].position, _triggeredArrowDispensers[i].rotation);
-            newArrow.InitialiseArrow(arrowSpeed, arrowDamages);
-
-            _dustParticleSystems[i].Play();
-        }
-
-        yield return new WaitForSeconds(cooldownDuration);
-
-        isOnCooldown = false;
-        transform.UChangePosition(0.2f, transform.position - Vector3.down * activatePosOffset, CurveType.EaseOutCubic);
-    }
-
-
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (isOnCooldown) return;
-        if (!collision.CompareTag("Hero")) return;
-        if (collision.GetComponent<HeroController>().CurrentControllerState == ControllerState.Jump) return;
-
-        StartCoroutine(TriggerTrapCoroutine());
-    }
 }

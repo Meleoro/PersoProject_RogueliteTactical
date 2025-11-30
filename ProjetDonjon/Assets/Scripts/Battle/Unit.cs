@@ -364,6 +364,7 @@ public class Unit : MonoBehaviour
             Die();
     }
 
+
     protected virtual void Die()
     {
         currentTile.UnitLeaveTile();
@@ -379,8 +380,11 @@ public class Unit : MonoBehaviour
         else
             CurrentHealth = CurrentMaxHealth;
 
+        AudioManager.Instance.PlaySoundOneShot(2, 11);
+
         StartCoroutine(DoColorEffectCoroutine(healColor));
     }
+
 
     private IEnumerator DoColorEffectCoroutine(Color color)
     {
@@ -505,10 +509,12 @@ public class Unit : MonoBehaviour
 
         if (isBuff)
         {
+            AudioManager.Instance.PlaySoundOneShot(2, 8);
             Destroy(Instantiate(buffVFX, transform.position, Quaternion.Euler(0, 0, 0)), 1f);
         }
         else
         {
+            AudioManager.Instance.PlaySoundOneShot(2, 7);
             Destroy(Instantiate(debuffVFX, transform.position, Quaternion.Euler(0, 0, 0)), 1f);
         }
     }
@@ -731,6 +737,17 @@ public class Unit : MonoBehaviour
     }
 
     #endregion
+
+
+    protected IEnumerator DisappearCoroutine(float duration)
+    {
+        BattleManager.Instance.RemoveUnit(this);
+        _spriteRenderer.material.ULerpMaterialFloat(duration, -0.5f, "_DitherProgress");
+
+        yield return new WaitForSeconds(duration);
+
+        Destroy(gameObject);
+    }
 
 
     public void UseItem(LootData itemData)

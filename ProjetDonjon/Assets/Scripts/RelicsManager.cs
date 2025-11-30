@@ -12,20 +12,27 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
     [SerializeField] private RelicData[] allRelics;
     [SerializeField] private Relic relicPrefab;
     [SerializeField] private RelicData debugRelicData;
+    [SerializeField] private CampLevelData[] campLevels;
 
     [Header("Actions")]
     public Action<RelicData, int> OnRelicObtained;
 
     [Header("Private Infos")]
     private List<RelicData> currentAvailableRelics;
+    private bool[] possessedRelicIndexes;
+    private int currentCampRelicCount;
+    private int currentCampLevel;
+    private int currentPossessedRelicCount;
 
     [Header("Public Infos")]
-    public bool[] PossessedRelicIndexes { get; private set; }
+    public bool[] PossessedRelicIndexes { get { return possessedRelicIndexes; } }
     public RelicData[] AllRelics { get { return allRelics; } }
+    public int CurrentCampLevel { get { return currentCampLevel; } }
+    public int CurrentCampRelicCount { get { return currentCampRelicCount; } } 
+    public CampLevelData[] CampLevels { get { return campLevels; } }
 
 
-
-
+    // For Debug
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.O))
@@ -33,6 +40,23 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
             Relic newRelic = Instantiate(relicPrefab, HeroesManager.Instance.Heroes[HeroesManager.Instance.CurrentHeroIndex].transform.position, 
                 Quaternion.Euler(0, 0, 0));
             newRelic.Initialise(debugRelicData);
+        }
+    }
+
+
+    #region Main Functions
+
+    public void StartExploration(int enviroIndex)
+    {
+        int startIndex = enviroIndex * 12;
+        currentAvailableRelics = new List<RelicData>();
+
+        for (int i = 0; i < 12; i++)
+        {
+            if (i + startIndex >= allRelics.Length) return;
+            if (PossessedRelicIndexes[i + startIndex]) continue;
+
+            currentAvailableRelics.Add(allRelics[i]);
         }
     }
 
@@ -51,21 +75,7 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
         }
     }
 
-
-    public void StartExploration(int enviroIndex)
-    {
-        int startIndex = enviroIndex * 12;
-        currentAvailableRelics = new List<RelicData>();
-
-        for(int i = 0; i < 12; i++)
-        {
-            if (i + startIndex >= allRelics.Length) return;
-            if (PossessedRelicIndexes[i + startIndex]) continue;
-
-            currentAvailableRelics.Add(allRelics[i]);
-        }
-    }
-
+    #endregion
 
 
     #region Verify Relic Spawn 
@@ -112,12 +122,50 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
 
     public void LoadGame(GameData data)
     {
-        PossessedRelicIndexes = data.possessedRelicsIndexes;
+        possessedRelicIndexes = data.possessedRelicsIndexes;
+        currentCampLevel = data.campLevel;
     }
 
     public void SaveGame(ref GameData data)
     {
-        data.possessedRelicsIndexes = PossessedRelicIndexes;
+        data.possessedRelicsIndexes = possessedRelicIndexes;
+        data.campLevel = currentCampLevel;
+    }
+
+    #endregion
+
+
+    #region Camp Levels
+
+    public void ActualiseCampLevel()
+    {
+        currentCampLevel = 0;
+        currentCampRelicCount = 0;
+        currentPossessedRelicCount = 0;
+
+        for (int i = 0; i < PossessedRelicIndexes.Length; i++)
+        {
+            if (!PossessedRelicIndexes[i]) continue;
+            currentPossessedRelicCount++;
+            currentCampRelicCount++;
+        }
+
+        for (int i = 0; i < campLevels.Length; i++)
+        {
+            if (campLevels[i].neededRelicCount > currentPossessedRelicCount) continue;
+            currentCampLevel = i + 1;
+        }
+    }
+
+    public CampLevelData[] GetUnlockedCampLevels()
+    {
+        CampLevelData[] unlockedLevels = new CampLevelData[currentCampLevel];
+        for (int i = 0; i < currentCampLevel; i++)
+        {
+            unlockedLevels[i] = campLevels[i];
+        }
+
+        return unlockedLevels;
     }
 
     #endregion

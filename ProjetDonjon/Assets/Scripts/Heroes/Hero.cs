@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Utilities;
 using Random = UnityEngine.Random;
 
 public class Hero : Unit
@@ -164,6 +165,7 @@ public class Hero : Unit
     {
         base.ExitBattle(currentHero);
         _controller.ExitBattle();
+        EndTurnOutline();
 
         currentShield = 0;
 
@@ -195,6 +197,8 @@ public class Hero : Unit
 
         OnHeroInfosChange?.Invoke();
 
+        AudioManager.Instance.PlaySoundOneShot(2, 0);
+
         LootData[] hitLootEffects = GetEquippedLootOfEffectType(SpecialEquipmentEffectType.HitAlteration);
 
         for(int i = 0; i < hitLootEffects.Length; i++)
@@ -220,7 +224,12 @@ public class Hero : Unit
     {
         _animator.SetBool("IsDead", true);
 
-        if(BattleManager.Instance.IsInBattle)
+        currentTile.UnitLeaveTile();
+        AudioManager.Instance.PlaySoundOneShot(2, 9);
+
+        StartCoroutine(DisappearCoroutine(1.0f));
+
+        if (BattleManager.Instance.IsInBattle)
             BattleManager.Instance.RemoveUnit(this);
 
         OnDead.Invoke();

@@ -37,6 +37,7 @@ public class InteractionManager : MonoBehaviour
         transform.position = currentHeroTransform.position + new Vector3(0, yOffset, 0);
 
         if (closestInteractible is null) return;
+        if (UIManager.Instance.CurrentUIState != UIState.Nothing) return;
         if (InputManager.wantsToInteract)
         {
             closestInteractible.Interact();

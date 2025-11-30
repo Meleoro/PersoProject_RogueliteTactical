@@ -11,8 +11,9 @@ public class GameData
     public string[] heroesEquippedSkillIndexes;
     public string[] heroesEquippedPassiveIndexes;
 
-    // EQUIPMENT / RELICS
+    // EQUIPMENT / RELICS / CAMP LEVEL
     public bool[] possessedRelicsIndexes;
+    public int campLevel;
 
 
 
@@ -27,5 +28,6 @@ public class GameData
         possessedRelicsIndexes = new bool[12 * 4];
 
         needEquippedInitialisation = true;
+        campLevel = 0;
     }
 }

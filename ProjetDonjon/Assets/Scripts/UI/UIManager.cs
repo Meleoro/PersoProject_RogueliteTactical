@@ -31,6 +31,7 @@ public class UIManager : GenericSingletonClass<UIManager>
     public Minimap Minimap { get { return _minimap; } }
     public FloorTransition FloorTransition { get { return _floorTransition; } }
     public HeroInfosScreen HeroInfosScreen { get { return _heroInfosScreen; } }
+    public UIState CurrentUIState { get { return currentState; } }
 
     [Header("Actions")]
     public Action OnStartDrag;

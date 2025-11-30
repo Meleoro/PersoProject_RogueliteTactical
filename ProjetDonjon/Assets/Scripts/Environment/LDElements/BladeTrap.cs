@@ -13,13 +13,14 @@ public class BladeTrap : MonoBehaviour
     [SerializeField] private float forcedOffset;
     [SerializeField] private float ceilingMatFloatValue;
 
-
     [Header("References")]
     [SerializeField] private SpriteRenderer _trapSprite;
     [SerializeField] private Transform _endPosTr;
     [SerializeField] private BladeTrapCollider _bladeCollider;
     [SerializeField] private ParticleSystem _sparksVFX;
     [SerializeField] private SpriteLayerer _spriteLayerer;
+    [SerializeField] private AudioSource _audioSource;
+
 
 
     private void Start()
@@ -51,6 +52,8 @@ public class BladeTrap : MonoBehaviour
             _sparksVFX.Play();
             _spriteLayerer.PublicOffset = -50;
             _bladeCollider.canCollide = true;
+
+            AudioManager.Instance.PlaySoundOneShotRandomPitch(0.95f, 1.05f, 1, 8, 0, _audioSource);
 
             yield return new WaitForSeconds(0.05f);
 

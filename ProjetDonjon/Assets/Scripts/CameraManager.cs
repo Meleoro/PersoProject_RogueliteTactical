@@ -68,7 +68,7 @@ public class CameraManager : GenericSingletonClass<CameraManager>
         transform.position = Vector3.Lerp(transform.position, currentWantedPos, followSpeed * Time.deltaTime);
         _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, currentWantedSize, sizeFollowSpeed * Time.deltaTime);
 
-        ManageMouseInputs();
+        if(!isLocked) ManageMouseInputs();
     }
 
 

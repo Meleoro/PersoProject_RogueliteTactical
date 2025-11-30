@@ -172,16 +172,6 @@ public class AIUnit : Unit
         StartCoroutine(DisappearCoroutine(duration * 0.25f));
     }
 
-    private IEnumerator DisappearCoroutine(float duration)
-    {
-        BattleManager.Instance.RemoveUnit(this);
-        _spriteRenderer.material.ULerpMaterialFloat(duration, -0.5f, "_DitherProgress");
-
-        yield return new WaitForSeconds(duration);
-
-        Destroy(gameObject);
-    }
-
     #endregion
 
 
@@ -245,7 +235,7 @@ public class AIUnit : Unit
             EndTurn(0f);
         }
     }
-
+    
     
     private (BattleTile, BattleTile) GetBestMove(BattleTile currentTile, int depth = 0, int maxDepth = 0)
     {
@@ -331,6 +321,7 @@ public class AIUnit : Unit
 
         return (pickedMoveTile, pickedSkillTile);
     }
+
 
     private BattleTile[] GetDangerTiles(Vector2Int movePos, Vector2Int skillPos)
     {
@@ -427,6 +418,8 @@ public class AIUnit : Unit
     {
         currentTile.UnitLeaveTile();
 
+        AudioManager.Instance.PlaySoundOneShot(2, 10);
+
         HeroesManager.Instance.SpawnXP(AIData.minXpDrop, transform.position);
 
         if(BattleManager.Instance.CurrentEnemies.Count == 1 || isBoss)
@@ -437,6 +430,13 @@ public class AIUnit : Unit
         {
             StartCoroutine(DisappearCoroutine(1f));
         }
+    }
+
+    public override void TakeDamage(int damageAmount, Unit originUnit)
+    {
+        AudioManager.Instance.PlaySoundOneShot(2, 1);
+
+        base.TakeDamage(damageAmount, originUnit);
     }
 
     #endregion

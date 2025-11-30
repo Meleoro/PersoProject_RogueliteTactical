@@ -268,7 +268,7 @@ public class TilesManager
 
     public void StopDisplayPossibleMoveTiles()
     {
-        if (_playerActionsMenu.CurrentMenu == MenuType.Skills) return;
+        if (_playerActionsMenu.CurrentMenu == MenuType.LaunchSkill) return;
 
         ResetTiles();
 
@@ -279,7 +279,7 @@ public class TilesManager
     }
 
 
-    public void DisplayPossibleMoveTiles(Hero hero)
+    public void DisplayPossibleMoveTiles(Hero hero, bool focusCamera = false)
     {
         BattleTile startTile = hero.CurrentTile;
         List<BattleTile> openList = new List<BattleTile>();
@@ -320,7 +320,7 @@ public class TilesManager
             }
         }
 
-        CameraManager.Instance.FocusOnPosition(tilesPositionsAddition / tilesCount, 6f);
+        if(focusCamera) CameraManager.Instance.FocusOnPosition(tilesPositionsAddition / tilesCount, 6f);
     }
 
 
