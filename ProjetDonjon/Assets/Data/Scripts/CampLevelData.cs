@@ -19,8 +19,8 @@ public class CampLevelData : ScriptableObject
     [TextArea] public string unlockDescription;
 
     [Header("Hero Unlock")]
-    public Hero unlockedHero;
+    public int unlockedHeroIndex;
 
     [Header("Expedition Unlock")]
-    public int expeditionUnlockedIndex;
+    public int unlockedExpeditionIndex;
 }

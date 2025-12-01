@@ -19,6 +19,7 @@ public class MainMetaMenu : MonoBehaviour
     private int unhoveredIndex = -1;
     private CampLevelData[] campLevels;
     private int currentCampLevel;
+    private int currentRelicCount;
 
     [Header("References")]
     [SerializeField] private RectTransform[] _buttonsRectTr;
@@ -35,7 +36,10 @@ public class MainMetaMenu : MonoBehaviour
 
     [Header("References Camp Lvl")]
     [SerializeField] private Image _campLevelProgressBar;
+    [SerializeField] private Image _darkBackground;
     [SerializeField] private TextMeshProUGUI _campLevelProgressText;
+    [SerializeField] private TextMeshProUGUI _campLevelMainText;
+    [SerializeField] private PopUp _popUp;
 
 
 
@@ -50,6 +54,8 @@ public class MainMetaMenu : MonoBehaviour
 
         campLevels = RelicsManager.Instance.CampLevels;
         currentCampLevel = RelicsManager.Instance.CurrentCampLevel;
+
+        ActualiseCampProgress();
     }
 
 
@@ -82,8 +88,14 @@ public class MainMetaMenu : MonoBehaviour
     }
 
 
-    public void Show()
+    public void Show(bool instant)
     {
+        if (instant)
+        {
+            _mainRectTr.localPosition = Vector3.zero;
+            return;
+        }
+
         StartCoroutine(ShowCoroutine());
     }
 
@@ -208,14 +220,22 @@ public class MainMetaMenu : MonoBehaviour
         int previousCampLevel = RelicsManager.Instance.CurrentCampLevel;
         int previousRelicCount = RelicsManager.Instance.CurrentCampRelicCount;
 
+        if (campLevels == null) return;
+
+        _campLevelProgressBar.fillAmount = previousRelicCount / campLevels[previousCampLevel].neededRelicCount;
+        _campLevelProgressText.text = previousRelicCount + "/" + campLevels[previousCampLevel].neededRelicCount;
+        _campLevelMainText.text = "CAMP LEVEL " + previousCampLevel;
+
         RelicsManager.Instance.ActualiseCampLevel();
 
-        int newCampLevel = RelicsManager.Instance.CurrentCampLevel;
-        int newRelicCount = RelicsManager.Instance.CurrentCampRelicCount;
+        currentRelicCount = RelicsManager.Instance.CurrentCampRelicCount;
 
-        if(newRelicCount != previousRelicCount)
+        if(currentRelicCount != previousRelicCount)
         {
-            StartCoroutine(PlayProgressCoroutine((float)newRelicCount / campLevels[previousCampLevel].neededRelicCount));
+            _darkBackground.DOFade(0.6f, 0.2f);
+            _darkBackground.raycastTarget = true;
+
+            StartCoroutine(PlayProgressCoroutine((float)currentRelicCount / campLevels[previousCampLevel].neededRelicCount));
         }
     }
 
@@ -225,25 +245,39 @@ public class MainMetaMenu : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+        // If we gain no new level
         if(endProgress < 1)
         {
+            _darkBackground.DOFade(0f, 0.2f);
+            _darkBackground.raycastTarget = false;
 
             yield break;
         }
 
+        // If we gain a new level
         _campLevelProgressBar.fillAmount = 0;
+        _campLevelMainText.text = "CAMP LEVEL " + ++currentCampLevel;
+        _campLevelProgressText.text = campLevels[currentCampLevel].neededRelicCount + "/" + campLevels[currentCampLevel].neededRelicCount;
 
-        DisplayUnlockWindow(campLevels[currentCampLevel++]);
+        _popUp.DisplayPopUp(campLevels[currentCampLevel]);
+        _popUp.OnHide += ContinueProgress;
     }
 
-    public void DisplayUnlockWindow(CampLevelData newLevelData)
+    public void ContinueProgress()
     {
-        
-    }
+        _popUp.OnHide -= ContinueProgress;
 
-    public void HideUnlockWindow()
-    {
+        _campLevelProgressText.text = campLevels[currentCampLevel - 1].neededRelicCount + "/" + campLevels[currentCampLevel].neededRelicCount;
+        _campLevelMainText.text = "CAMP LEVEL " + currentCampLevel;
 
+        if(currentRelicCount != campLevels[currentCampLevel - 1].neededRelicCount)
+        {
+            StartCoroutine(PlayProgressCoroutine((float)currentRelicCount / campLevels[currentCampLevel].neededRelicCount));
+            return;
+        }
+
+        _darkBackground.DOFade(0f, 0.2f);
+        _darkBackground.raycastTarget = false;
     }
 
     #endregion

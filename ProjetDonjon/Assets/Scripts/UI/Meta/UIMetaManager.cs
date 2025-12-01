@@ -58,7 +58,7 @@ public class UIMetaManager : GenericSingletonClass<UIMetaManager>
             switch (currentMetaMenu)
             {
                 case CurrentMetaMenu.Expeditions:
-                    _expeditionsMenu.Hide();
+                    _expeditionsMenu.Hide(false);
                     break;
 
                 case CurrentMetaMenu.Chest:
@@ -86,6 +86,12 @@ public class UIMetaManager : GenericSingletonClass<UIMetaManager>
         _collectionMenu.OnEndTransition += EndTransition;
         _collectionMenu.OnShow += () => currentMetaMenu = CurrentMetaMenu.Collection;
         _collectionMenu.OnHide += () => currentMetaMenu = CurrentMetaMenu.Main;
+
+        _mainMetaMenu.ActualiseCampProgress();
+        _mainMetaMenu.Show(true);
+
+        _expeditionsMenu.Hide(true);
+
     }
 
     public void QuitMetaMenu()

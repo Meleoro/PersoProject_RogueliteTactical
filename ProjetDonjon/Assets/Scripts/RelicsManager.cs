@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
+using static CampLevelData;
 using Random = UnityEngine.Random;
 
 public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
@@ -37,9 +38,10 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
     {
         if (Input.GetKeyDown(KeyCode.O))
         {
+            int index = Random.Range(0, currentAvailableRelics.Count);
             Relic newRelic = Instantiate(relicPrefab, HeroesManager.Instance.Heroes[HeroesManager.Instance.CurrentHeroIndex].transform.position, 
                 Quaternion.Euler(0, 0, 0));
-            newRelic.Initialise(debugRelicData);
+            newRelic.Initialise(currentAvailableRelics[index]);
         }
     }
 
@@ -166,6 +168,33 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
         }
 
         return unlockedLevels;
+    }
+
+    public bool VerifyHasCampUpgrade(CampUnlockType unlockType, int additionalIndex = 0)
+    {
+        for(int i = 0; i < currentCampLevel; i++)
+        {
+            if (campLevels[i].unlockType != unlockType) continue;
+
+            switch (unlockType)
+            {
+                case CampUnlockType.NewHero:
+                    if(additionalIndex == campLevels[i].unlockedHeroIndex) return true;
+                    break;
+
+                case CampUnlockType.NewExpedition:
+                    if (additionalIndex == campLevels[i].unlockedExpeditionIndex) return true;
+                    break;
+
+                case CampUnlockType.Shop:
+                    return true;
+
+                case CampUnlockType.Blacksmith:
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     #endregion

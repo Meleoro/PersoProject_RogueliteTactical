@@ -95,7 +95,7 @@ public class ChestMenu : MonoBehaviour
         OnStartTransition.Invoke();
         OnHide.Invoke();
 
-        _mainMetaMenu.Show();
+        _mainMetaMenu.Show(false);
 
         StartCoroutine(HideCoroutine());
     }

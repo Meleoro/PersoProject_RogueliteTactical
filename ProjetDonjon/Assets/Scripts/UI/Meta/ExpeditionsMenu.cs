@@ -71,12 +71,18 @@ public class ExpeditionsMenu : MonoBehaviour
         OnEndTransition.Invoke();
     }
 
-    public void Hide()
+    public void Hide(bool instant)
     {
-        OnStartTransition.Invoke();
-        OnHide.Invoke();
+        if (instant)
+        {
+            _mainRectTr.position = _hiddenPositionRectTr.position;
+            return;
+        }
 
-        _mainMetaMenu.Show();
+        OnStartTransition?.Invoke();
+        OnHide?.Invoke();
+
+        _mainMetaMenu.Show(false);
         StartCoroutine(HideCoroutine());
     }
 
