@@ -15,6 +15,9 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
     [SerializeField] private RelicData debugRelicData;
     [SerializeField] private CampLevelData[] campLevels;
 
+    [Header("Debug")]
+    [SerializeField] private bool unlockAllDebug;
+
     [Header("Actions")]
     public Action<RelicData, int> OnRelicObtained;
 
@@ -84,6 +87,14 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
 
     public RelicData TryRelicSpawn(RelicSpawnType eventType, int floorIndex, float probaModificator)
     {
+        if (TutoManager.Instance.IsInTuto)
+        {
+            if (eventType != RelicSpawnType.BattleEndSpawn) return null;
+
+            StartCoroutine(TutoManager.Instance.DisplayTutorialWithDelayCoroutine(9, 0.8f));
+            return allRelics[0];
+        }
+
         RelicData[] possibeRelics = GetAllRelicsOfSpawnType(eventType);
 
         return GetSpawnedRelic(possibeRelics, floorIndex);
@@ -126,6 +137,12 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
     {
         possessedRelicIndexes = data.possessedRelicsIndexes;
         currentCampLevel = data.campLevel;
+
+        if (unlockAllDebug)
+        {
+            currentCampLevel = campLevels.Length - 1;
+        }
+
     }
 
     public void SaveGame(ref GameData data)
@@ -147,14 +164,14 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
 
         for (int i = 0; i < PossessedRelicIndexes.Length; i++)
         {
-            if (!PossessedRelicIndexes[i]) continue;
+            if (!PossessedRelicIndexes[i] && !unlockAllDebug) continue;
             currentPossessedRelicCount++;
             currentCampRelicCount++;
         }
 
         for (int i = 0; i < campLevels.Length; i++)
         {
-            if (campLevels[i].neededRelicCount > currentPossessedRelicCount) continue;
+            if (campLevels[i].neededRelicCount > currentPossessedRelicCount && !unlockAllDebug) continue;
             currentCampLevel = i + 1;
         }
     }
@@ -172,6 +189,8 @@ public class RelicsManager : GenericSingletonClass<RelicsManager>, ISaveable
 
     public bool VerifyHasCampUpgrade(CampUnlockType unlockType, int additionalIndex = 0)
     {
+        if (unlockAllDebug) return true;
+
         for(int i = 0; i < currentCampLevel; i++)
         {
             if (campLevels[i].unlockType != unlockType) continue;

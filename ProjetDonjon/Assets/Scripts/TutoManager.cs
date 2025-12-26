@@ -46,7 +46,13 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
 
     public void DisplayTutorial(int tutoID)
     {
-        if(didTutorialStep[tutoID]) return;
+        if (didTutorialStep[tutoID]) return;
+        if (disableTuto) return;
+
+        // To avoid having the camera moving in battle
+        if(BattleManager.Instance.IsInBattle)
+            CameraManager.Instance.LockCameraInputs();
+
         didTutorialStep[tutoID] = true;
 
         currentStep = tutoSteps[tutoID];
@@ -102,6 +108,12 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
                 HeroesManager.Instance.InteractionManager.OnInteraction += ValidateEndCondition;
                 endConditionsValidated = new bool[1];
                 break;
+
+
+            case TutoEndCondition.ClickEnemy:
+                BattleManager.Instance.CurrentEnemies[0].OnClickUnit += ValidateEndCondition;
+                endConditionsValidated = new bool[1];
+                break;
         }
     }
 
@@ -123,6 +135,9 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
     private void EndTutorialStep()
     {
         _tutorialPanel.OnHide -= EndTutorialStep;
+
+        if (BattleManager.Instance.IsInBattle)
+            CameraManager.Instance.UnlockCameraInputs();
 
         switch (currentStep.endCondition)
         {
@@ -146,11 +161,17 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
                 break;
 
             case TutoEndCondition.AddShield:
+                UIManager.Instance.PlayerActionsMenu.OnSkillAction -= ValidateEndCondition;
                 BattleManager.Instance.CurrentHeroes[0].OnAlterationAdded -= ValidateEndCondition;
+                BattleManager.Instance.OnHeroTurnStart += DoThirdBattleTutorial;
                 break;
 
             case TutoEndCondition.Interact:
                 HeroesManager.Instance.InteractionManager.OnInteraction -= ValidateEndCondition;
+                break;
+
+            case TutoEndCondition.ClickEnemy:
+                BattleManager.Instance.CurrentEnemies[0].OnClickUnit -= ValidateEndCondition;
                 break;
         }
 
@@ -163,9 +184,13 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
     }
 
 
-    private void DoSecondBattleTutorial(int index)
+    private void DoSecondBattleTutorial()
     {
-        StartCoroutine(DisplayTutorialWithDelayCoroutine(index, 0.5f));
+        StartCoroutine(DisplayTutorialWithDelayCoroutine(6, 0.6f));
+    }
+    private void DoThirdBattleTutorial()
+    {
+        StartCoroutine(DisplayTutorialWithDelayCoroutine(8, 0.5f));
     }
 
 

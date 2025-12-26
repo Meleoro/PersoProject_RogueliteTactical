@@ -85,7 +85,17 @@ public class TutorialPanel : MonoBehaviour
                 highlightedImages = new Image[] { UIManager.Instance.PlayerActionsMenu.ButtonImages[1] };
                 TutoManager.Instance.OnFirstStepValidated += HighlightFirstSkillSkill;
                 break;
+
+            case TutoHighlightType.HighlightEnemy:
+                BattleManager.Instance.CurrentEnemies[0].UI.Canvas.sortingOrder = 310;
+                highlightedImages = new Image[] { };
+
+                _backDarkImage.DOComplete();
+                _backDarkImage.DOFade(0.3f, 0.2f).SetEase(Ease.OutBack);
+                break;
         }
+
+        if (highlightedImages.Length == 0) return;
 
         originalParent = highlightedImages[0].rectTransform.parent;
         for(int i = 0; i < highlightedImages.Length; i++)

@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
 
     public static Vector2 moveDir;
     public static Vector2 mouseDelta;
+    public static Vector2 mousePosition;
     public static float mouseScroll;
     public static bool wantsToJump;
     public static bool isHoldingJump;
@@ -24,6 +25,7 @@ public class InputManager : MonoBehaviour
     {
         moveDir = _playerInput.actions["Move"].ReadValue<Vector2>();
         mouseDelta = _playerInput.actions["MouseDelta"].ReadValue<Vector2>();
+        mousePosition = _playerInput.actions["MousePosition"].ReadValue<Vector2>();
         mouseScroll = _playerInput.actions["MouseScroll"].ReadValue<float>();
         wantsToJump = _playerInput.actions["Jump"].WasPressedThisFrame();
         isHoldingJump = _playerInput.actions["Jump"].IsPressed();

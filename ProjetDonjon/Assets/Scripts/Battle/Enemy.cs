@@ -197,6 +197,7 @@ public class AIUnit : Unit
         BattleTile skillTile = null;
         (moveTile, skillTile) = GetBestMove(currentTile);
 
+        // If we can't use any skills on this turn, we look for the next turns where it will be possible
         if(skillTile is null)
         {
             (moveTile, skillTile) = GetBestMove(currentTile, 0, 1);
@@ -239,7 +240,6 @@ public class AIUnit : Unit
             EndTurn(0f);
         }
     }
-    
     
     private (BattleTile, BattleTile) GetBestMove(BattleTile currentTile, int depth = 0, int maxDepth = 0)
     {
@@ -325,7 +325,6 @@ public class AIUnit : Unit
 
         return (pickedMoveTile, pickedSkillTile);
     }
-
 
     private BattleTile[] GetDangerTiles(Vector2Int movePos, Vector2Int skillPos)
     {
@@ -415,7 +414,7 @@ public class AIUnit : Unit
 
         StartCoroutine(SquishCoroutine(0.15f));
 
-        //base.ClickUnit();
+        OnClickUnit?.Invoke(0);
     }
 
     protected override void Die()

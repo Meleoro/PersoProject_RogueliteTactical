@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Utilities;
 
 public enum ControllerState
@@ -170,9 +171,9 @@ public class HeroController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+        Rotate(Vector2.right);
+
         transform.position = aimedPos;
-        transform.rotation = Quaternion.Euler(0, 0, 0);
-        _spriteParent.transform.rotation = Quaternion.Euler(0, 0, 0);
         isAutoMoving = false;
     }
 

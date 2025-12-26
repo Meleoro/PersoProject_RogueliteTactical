@@ -39,6 +39,7 @@ public class UnitUI : MonoBehaviour
 
     [Header("Public Infos")]
     public RectTransform XPPointsParent { get { return _xpPointsParent; } }
+    public Canvas Canvas { get { return _canvas; } }
 
     [Header("References")]
     [SerializeField] private TextMeshProUGUI _healthText;
@@ -52,6 +53,7 @@ public class UnitUI : MonoBehaviour
     [SerializeField] private RectTransform _alterationsParent;
     [SerializeField] private Alteration[] _alterations;
     [SerializeField] private TextMeshProUGUI _damageText;
+    [SerializeField] private Canvas _canvas;
 
     [Header("XP References")]
     [SerializeField] private Image _xpFillableImage;

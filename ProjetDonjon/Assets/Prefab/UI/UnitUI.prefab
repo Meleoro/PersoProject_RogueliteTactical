@@ -615,7 +615,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &1916114544885174928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,6 +662,7 @@ MonoBehaviour:
   - {fileID: 2633528182330922388}
   - {fileID: 5371169672225795477}
   _damageText: {fileID: 1556881560170467375}
+  _canvas: {fileID: 2853168883801503531}
   _xpFillableImage: {fileID: 4554631432185547722}
   _xpOutlineImage: {fileID: 5144278641495065692}
   _xpBackImage: {fileID: 8882797041666090107}

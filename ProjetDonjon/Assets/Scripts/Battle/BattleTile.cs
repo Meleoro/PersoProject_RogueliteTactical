@@ -260,6 +260,8 @@ public class BattleTile : MonoBehaviour
 
     public void HoverTile()
     {
+        if (BattleManager.Instance.IsEnemyTurn) return;
+
         isHovered = true;
 
         OverlayTile();
@@ -307,6 +309,8 @@ public class BattleTile : MonoBehaviour
 
     public void UnhoverTile()
     {
+        if (BattleManager.Instance.IsEnemyTurn) return;
+
         isHovered = false;
 
         StartCoroutine(VerifyQuitOverlayTile());
@@ -359,6 +363,7 @@ public class BattleTile : MonoBehaviour
     {
         await Task.Delay((int)(Time.deltaTime * 1000));
 
+        if (BattleManager.Instance.IsEnemyTurn) return;
         if (InputManager.wantsToRightClick) return;
 
         switch (currentTileState)

@@ -22,11 +22,11 @@ public class BattleManager : GenericSingletonClass<BattleManager>
     public Action OnSkillUsed;
     public Action OnBattleEnd;
     public Action OnBattleStart;
-    public Action<int> OnHeroTurnStart;    // For tuto
+    public Action OnHeroTurnStart;    // For tuto
 
     [Header("Private Infos")]
     private bool isInBattle;
-    private bool isInBattleCutscene;
+    private bool isEnemyTurn;
     private List<Unit> currentHeroes = new();
     private List<Unit> deadHeroes = new();
     private List<AIUnit> currentEnemies = new();
@@ -44,6 +44,7 @@ public class BattleManager : GenericSingletonClass<BattleManager>
     public List<Unit> CurrentHeroes { get { return currentHeroes; } }
     public List<AIUnit> CurrentEnemies { get { return currentEnemies; } }
     public bool IsInBattle {  get { return isInBattle; } }
+    public bool IsEnemyTurn { get { return isEnemyTurn; } }
     public MenuType CurrentActionType { get { return _playerActionsMenu.CurrentMenu; } }
     public Tile[] HoleTiles { get { return holeTiles; } }
     public PathCalculator PathCalculator { get { return _pathCalculator; } }
@@ -190,8 +191,6 @@ public class BattleManager : GenericSingletonClass<BattleManager>
 
     private void EndBattle()
     {
-        isInBattleCutscene = false;
-
         battleRoom.EndBattle();
         OnBattleEnd.Invoke();
 
@@ -274,7 +273,6 @@ public class BattleManager : GenericSingletonClass<BattleManager>
 
     public void StartBattleEndCutscene()
     {
-        isInBattleCutscene = true;
         isInBattle = false;
 
         UIManager.Instance.HideHeroInfosPanels();
@@ -301,11 +299,13 @@ public class BattleManager : GenericSingletonClass<BattleManager>
 
         if (currentUnit.GetType() == typeof(Hero))
         {
-            OnHeroTurnStart?.Invoke(6);
+            isEnemyTurn = false;
+            OnHeroTurnStart?.Invoke();
             _playerActionsMenu.SetupHeroActionsUI(currentUnit as Hero);
         }
         else
         {
+            isEnemyTurn = true;
             CameraManager.Instance.FocusOnTr(currentUnit.transform, 5f);
             AIUnit enemy = currentUnit as AIUnit;
             StartCoroutine(enemy.PlayEnemyTurnCoroutine());

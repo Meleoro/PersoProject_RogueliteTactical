@@ -39,6 +39,7 @@ public class Unit : MonoBehaviour
     [Header("Actions")]
     public Action OnHeroInfosChange;
     public Action<int> OnAlterationAdded;    // For tuto 
+    public Action<int> OnClickUnit;          // For tuto 
 
     [Header("Alteration VFXs")]
     [SerializeField] private GameObject buffVFX;
@@ -96,6 +97,7 @@ public class Unit : MonoBehaviour
     public int CurrentMovePoints { get { return currentMovePoints + movePointsModificatorAdditive; } }
     public float CurrentCritMultiplier { get { return 2 + critModificatorAdditive; } }
     public UnitData UnitData { get { return unitData; } }
+    public UnitUI UI { get { return _ui; } }
     public BattleTile CurrentTile { get { return currentTile; } }
     public PassiveData[] EquippedPassives { get { return equippedPassives; } }
     public bool IsEnemy { get { return isEnemy; } }
@@ -639,6 +641,8 @@ public class Unit : MonoBehaviour
 
     private void HoverUnit()
     {
+        if (BattleManager.Instance.IsEnemyTurn) return;
+
         isHovered = true;
 
         CurrentTile?.OverlayTile();
@@ -646,6 +650,8 @@ public class Unit : MonoBehaviour
 
     private void UnHoverUnit()
     {
+        if (BattleManager.Instance.IsEnemyTurn) return;
+
         isHovered = false;
 
         StartCoroutine(VerifyQuitOverlayTile());
@@ -664,7 +670,10 @@ public class Unit : MonoBehaviour
     {
         await Task.Delay((int)(Time.deltaTime * 1000));
 
+        if (BattleManager.Instance.IsEnemyTurn) return;
         if (InputManager.wantsToRightClick) return;
+
+        OnClickUnit?.Invoke(0);
 
         StartCoroutine(SquishCoroutine(0.15f));
         CurrentTile?.ClickTile();
@@ -732,6 +741,8 @@ public class Unit : MonoBehaviour
         {
             StopCoroutine(turnOutlineCoroutine);
         }
+
+        _spriteRenderer.material.ULerpMaterialColor(0.7f, new Color(0, 0, 0, 0), "_OutlineColor");
     }
 
     private IEnumerator TurnOutlineCoroutine()

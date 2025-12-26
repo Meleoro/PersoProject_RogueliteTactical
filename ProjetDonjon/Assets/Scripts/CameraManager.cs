@@ -25,12 +25,15 @@ public class CameraManager : GenericSingletonClass<CameraManager>
     [Header("Private Infos")]
     private Transform followedTransform;
     private Vector3 currentWantedPos;
+    private Vector3 mouseDragOrigin;
     private float currentWantedSize;
     private float baseSize;
     private bool isInitialised;
+    private bool isDragged;
     private bool isInBattle;
     private bool isShaking;
     private bool isLocked;
+    private bool isInputLocked;      // True if the players inputs are disabled
     private float angleBetweenRaycasts;
     private Vector2 bottomLeftLimit;
     private Vector2 upRightLimit;
@@ -93,6 +96,11 @@ public class CameraManager : GenericSingletonClass<CameraManager>
         return Mathf.Lerp(-maxSizeModifierExplo, 0, ((averageDist / raycastAmount) / maxRaycastDistExplo));
     }
 
+    public void LockCamera()
+    {
+        isLocked = true;
+    }
+
     public void LockCamera(Vector2 position, float size)
     {
         currentWantedPos = (Vector3)position - Vector3.forward * 10;
@@ -105,6 +113,17 @@ public class CameraManager : GenericSingletonClass<CameraManager>
     {
         isLocked = false;
     }
+
+    public void LockCameraInputs()
+    {
+        isInputLocked = true;
+    }
+
+    public void UnlockCameraInputs()
+    {
+        isInputLocked = true;
+    }
+
 
     #endregion
 
@@ -129,9 +148,19 @@ public class CameraManager : GenericSingletonClass<CameraManager>
 
     private void ManageMouseInputs()
     {
+        if (isInputLocked) return;
+
         if (Input.GetMouseButton(1))
         {
-            currentWantedPos -= (Vector3)InputManager.mouseDelta * (Time.deltaTime * 4);
+            if(!isDragged)
+            {
+                mouseDragOrigin = _camera.ScreenToWorldPoint(InputManager.mousePosition);
+                isDragged = true;
+            }
+
+            Vector3 dif = _camera.ScreenToWorldPoint(InputManager.mousePosition) - transform.position;
+            currentWantedPos = mouseDragOrigin - dif;
+
             if(InputManager.mouseDelta.sqrMagnitude > 0.1f)
             {
                 OnCameraMouseInput?.Invoke();
@@ -141,6 +170,10 @@ public class CameraManager : GenericSingletonClass<CameraManager>
                 Mathf.Clamp(currentWantedPos.x, bottomLeftLimit.x, upRightLimit.x),
                 Mathf.Clamp(currentWantedPos.y, bottomLeftLimit.y, upRightLimit.y), 
                 currentWantedPos.z);
+        }
+        else
+        {
+            isDragged = false;
         }
 
         currentWantedSize += InputManager.mouseScroll;
@@ -217,7 +250,7 @@ public class CameraManager : GenericSingletonClass<CameraManager>
     public void FocusOnPosition(Vector3 focusedPos, float cameraSize)
     {
         currentWantedPos = focusedPos + followOffset;
-        currentWantedSize = cameraSize;
+        currentWantedSize = Mathf.Clamp(cameraSize, battleMinSize, battleMaxSize); ;
     }
 
     #endregion

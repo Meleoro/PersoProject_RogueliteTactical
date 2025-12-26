@@ -95,6 +95,7 @@ public class Hero : Unit
             _controller.UpdateController();
         }
 
+        // For Debug
         if (Input.GetKeyDown(KeyCode.R))
         {
             GainLevel();
