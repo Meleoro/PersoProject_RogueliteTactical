@@ -15,6 +15,7 @@ MonoBehaviour:
   lootName: SKILL POTION
   lootDescription: Restores 2 Skill Point
   lootType: 2
+  rarityType: 1
   sprite: {fileID: -1512034606, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
   value: 15
   spaceTaken:
@@ -25,5 +26,12 @@ MonoBehaviour:
   strengthUpgrade: 0
   speedUpgrade: 0
   luckUpgrade: 0
+  mpUpgrade: 0
+  spUpgrade: 0
+  equipmentEffectType: 0
+  equipmentEffectAlteration: {fileID: 0}
+  equipmentEffectPower: 0
   consumableType: 1
   consumablePower: 2
+  usableOutsideBattle: 0
+  additionalTooltipDatas: []

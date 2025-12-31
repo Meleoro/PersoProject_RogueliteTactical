@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utilities;
 using static UnityEditor.Progress;
@@ -21,12 +22,14 @@ public class Inventory : MonoBehaviour
     [Header("Private Infos")]
     private InventorySlot[,] inventorySlotsTab = new InventorySlot[0, 0];
     private InventorySlot[] inventorySlots;
+    private InventorySlot[] baseSlots;
     private InventorySlot[] upgradeSlots1;
     private InventorySlot[] upgradeSlots2;
     private RectTransform originalParent;
-    private RectTransform originalLootParentParent;   // Oui
+    private RectTransform originalLootParentParent;  
     private Hero associatedHero;
     private bool isMoving;
+    private int currentLevel;
 
     [Header("References")]
     [SerializeField] private RectTransform _slotsParent;
@@ -60,13 +63,12 @@ public class Inventory : MonoBehaviour
     public void InitialiseInventory(Hero hero)
     {
         associatedHero = hero;
+        baseSlots = _slotsParent.GetComponentsInChildren<InventorySlot>();
+        upgradeSlots1 = _upgrade1SlotsParent.GetComponentsInChildren<InventorySlot>();
+        upgradeSlots2 = _upgrade2SlotsParent.GetComponentsInChildren<InventorySlot>();
 
-        inventorySlots = _slotsParent.GetComponentsInChildren<InventorySlot>();
-        if (!isChest)
-        {
-            upgradeSlots1 = _upgrade1SlotsParent.GetComponentsInChildren<InventorySlot>();
-            upgradeSlots2 = _upgrade2SlotsParent.GetComponentsInChildren<InventorySlot>();
-        }
+        inventorySlots = baseSlots.Concat(upgradeSlots1).Concat(upgradeSlots2).ToArray();
+        
         SetupSlots();
 
         if (isChest) InventoriesManager.Instance.AddSlots(inventorySlots);
@@ -77,26 +79,26 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             inventorySlotsTab[inventorySlots[i].SlotCoordinates.x, inventorySlots[i].SlotCoordinates.y] = inventorySlots[i];
-        }
-
-        for (int i = 0; i < inventorySlots.Length; i++)
-        {
             inventorySlots[i].SetupReferences(_lootParent, _slotsParent, _overlayedSlotsParent, this);
         }
 
-        if (isChest) return;
+        for (int i = 0; i < baseSlots.Length; i++)
+        {
+            baseSlots[i].SetIsAvailable(true);
+        }
 
+        // We disable the upgrades
         for (int i = 0; i < upgradeSlots1.Length; i++)
         {
-            inventorySlots[i].SetupReferences(_lootParent, _slotsParent, _overlayedSlotsParent, this);
-            upgradeSlots1[i].gameObject.SetActive(false);
+            upgradeSlots1[i].SetIsAvailable(false);
         }
+        _upgrade1SlotsParent.gameObject.SetActive(false);
 
         for (int i = 0; i < upgradeSlots2.Length; i++)
         {
-            inventorySlots[i].SetupReferences(_lootParent, _slotsParent, _overlayedSlotsParent, this);
-            upgradeSlots2[i].gameObject.SetActive(false);
+            upgradeSlots2[i].SetIsAvailable(false);
         }
+        _upgrade2SlotsParent.gameObject.SetActive(false);
     }
 
 
@@ -213,6 +215,63 @@ public class Inventory : MonoBehaviour
         return inventorySlots;
     }
 
+    public void UpdateInventoryLevel(int newLevel)
+    {
+        currentLevel = newLevel;
+
+        if(currentLevel >= 1)
+        {
+            _upgrade1SlotsParent.gameObject.SetActive(true);
+            for(int i = 0; i < upgradeSlots1.Length; i++)
+            {
+                upgradeSlots1[i].SetIsAvailable(true);
+            }
+        }
+        else
+        {
+            _upgrade1SlotsParent.gameObject.SetActive(false);
+            for (int i = 0; i < upgradeSlots1.Length; i++)
+            {
+                upgradeSlots1[i].SetIsAvailable(false);
+            }
+        }
+
+        if (currentLevel >= 2)
+        {
+            _upgrade2SlotsParent.gameObject.SetActive(true);
+            for (int i = 0; i < upgradeSlots2.Length; i++)
+            {
+                upgradeSlots2[i].SetIsAvailable(true);
+            }
+        }
+        else
+        {
+            _upgrade2SlotsParent.gameObject.SetActive(false);
+            for (int i = 0; i < upgradeSlots2.Length; i++)
+            {
+                upgradeSlots2[i].SetIsAvailable(false);
+            }
+        }
+    }
+
+    public int GetItemCount(LootData item)
+    {
+        int currentCount = 0;
+        HashSet<Loot> banned = new HashSet<Loot>();
+
+        for(int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (inventorySlots[i].AttachedLoot is null) continue;
+            if (inventorySlots[i].AttachedLoot.LootData != item) continue;
+            if (banned.Contains(inventorySlots[i].AttachedLoot)) continue;
+
+            banned.Add(inventorySlots[i].AttachedLoot);
+            currentCount++;
+        }
+
+        return currentCount;
+    }
+
     private Vector2Int GetInventoryDimensions()
     {
         Vector2Int result = Vector2Int.zero;
@@ -302,6 +361,8 @@ public class Inventory : MonoBehaviour
 
                 if (currentSlot is null) return new List<InventorySlot>();    // If the placement isn't valid
                 if (currentSlot.VerifyHasLoot()) return new List<InventorySlot>();
+                if (!currentSlot.IsAvailable) return new List<InventorySlot>();
+
                 validSlots.Add(currentSlot);             // If the placement is valid
             }
         }

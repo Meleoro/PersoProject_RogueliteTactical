@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf4e25216f199bc41a77737520795259, type: 3}
-  m_Name: ActionPotion3
+  m_Name: Sword3
   m_EditorClassIdentifier: 
-  lootName: STRONG ACTION POTION
-  lootDescription: Adds 3 Action Point for this turn
-  lootType: 2
-  rarityType: 2
-  sprite: {fileID: -875976009, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
-  value: 60
+  lootName: CRISTAL SWORD
+  lootDescription: 
+  lootType: 1
+  sprite: {fileID: 69072542855030155, guid: f1c9dbb95a46b5245a91b44d8416364c, type: 3}
+  value: 50
   spaceTaken:
   - row: 01
+  - row: 01
   equipmentType: 0
-  equipmentSprite: {fileID: 0}
-  healthUpgrade: 0
-  strengthUpgrade: 0
+  equipmentSprite: {fileID: -3282540353626509378, guid: f1c9dbb95a46b5245a91b44d8416364c, type: 3}
+  healthUpgrade: 2
+  strengthUpgrade: 1
   speedUpgrade: 0
   luckUpgrade: 0
   mpUpgrade: 0
@@ -31,7 +31,7 @@ MonoBehaviour:
   equipmentEffectType: 0
   equipmentEffectAlteration: {fileID: 0}
   equipmentEffectPower: 0
-  consumableType: 2
-  consumablePower: 3
+  consumableType: 0
+  consumablePower: 0
   usableOutsideBattle: 0
   additionalTooltipDatas: []

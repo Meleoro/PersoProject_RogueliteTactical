@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: HealPotion1
   m_EditorClassIdentifier: 
   lootName: WEAK HEAL POTION
-  lootDescription: Restores 5 HP
+  lootDescription: Restores 4 HP
   lootType: 2
+  rarityType: 0
   sprite: {fileID: -1493872523, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
   value: 5
   spaceTaken:
@@ -25,10 +26,12 @@ MonoBehaviour:
   strengthUpgrade: 0
   speedUpgrade: 0
   luckUpgrade: 0
+  mpUpgrade: 0
+  spUpgrade: 0
   equipmentEffectType: 0
   equipmentEffectAlteration: {fileID: 0}
   equipmentEffectPower: 0
   consumableType: 0
-  consumablePower: 5
+  consumablePower: 4
   usableOutsideBattle: 1
   additionalTooltipDatas: []

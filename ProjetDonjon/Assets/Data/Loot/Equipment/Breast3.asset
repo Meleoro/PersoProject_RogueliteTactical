@@ -10,30 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf4e25216f199bc41a77737520795259, type: 3}
-  m_Name: Breast2
+  m_Name: Breast3
   m_EditorClassIdentifier: 
-  lootName: CRISTAL ARMOR
-  lootDescription: Gives you Thorns II
+  lootName: METAL ARMOR
+  lootDescription: You start each fights with 2 Shields
   lootType: 1
-  rarityType: 2
-  sprite: {fileID: 1213750802, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
-  value: 100
+  rarityType: 1
+  sprite: {fileID: 1408896084216172181, guid: f1c9dbb95a46b5245a91b44d8416364c, type: 3}
+  value: 50
   spaceTaken:
   - row: 0101
   - row: 0101
   equipmentType: 2
-  equipmentSprite: {fileID: 1176501172, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
-  healthUpgrade: 1
+  equipmentSprite: {fileID: -7282768604804434793, guid: f1c9dbb95a46b5245a91b44d8416364c, type: 3}
+  healthUpgrade: 4
   strengthUpgrade: 0
   speedUpgrade: 0
-  luckUpgrade: 3
+  luckUpgrade: 0
   mpUpgrade: 0
   spUpgrade: 0
   equipmentEffectType: 1
-  equipmentEffectAlteration: {fileID: 11400000, guid: 413d1159baf8d47469e3d3c47bb1a95b, type: 2}
-  equipmentEffectPower: 0
+  equipmentEffectAlteration: {fileID: 11400000, guid: d2f85ac883d83d24dae0ce0269a5d9e8, type: 2}
+  equipmentEffectPower: 2
   consumableType: 0
   consumablePower: 0
   usableOutsideBattle: 0
   additionalTooltipDatas:
-  - {fileID: 11400000, guid: aaff5ee0ee52021438f482bfdbde0f50, type: 2}
+  - {fileID: 11400000, guid: 2e667cfbef3b2ac4c803004a64dfb851, type: 2}

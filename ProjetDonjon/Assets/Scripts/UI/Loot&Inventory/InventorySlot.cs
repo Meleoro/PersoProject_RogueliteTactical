@@ -14,6 +14,7 @@ public class InventorySlot : MonoBehaviour
     public Vector2Int slotCoordinates;
     private Vector3 baseSize;
     private bool isOverlayed;
+    private bool isAvailable;
     private int overlayCount;
     private Loot attachedLoot;
     private Inventory associatedInventory;
@@ -21,7 +22,9 @@ public class InventorySlot : MonoBehaviour
     [Header("Public Infos")]
     public Vector2Int SlotCoordinates { get { return slotCoordinates; } }
     public RectTransform RectTransform { get { return _rectTr; } }
+    public Loot AttachedLoot { get { return attachedLoot; } }
     public Inventory AssociatedInventory { get { return associatedInventory; } }
+    public bool IsAvailable { get { return isAvailable; } }
 
     [Header("References")]
     [SerializeField] private RectTransform _rectTr;
@@ -50,6 +53,12 @@ public class InventorySlot : MonoBehaviour
         _overlayedParent = overlayedPrt;
         associatedInventory = inventory;
     }
+
+    public void SetIsAvailable(bool isAvailable)
+    {
+        this.isAvailable = isAvailable;
+    }
+
 
     #region Manage Slot Content Functions
 

@@ -10,28 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf4e25216f199bc41a77737520795259, type: 3}
-  m_Name: ActionPotion3
+  m_Name: Boots3
   m_EditorClassIdentifier: 
-  lootName: STRONG ACTION POTION
-  lootDescription: Adds 3 Action Point for this turn
-  lootType: 2
-  rarityType: 2
-  sprite: {fileID: -875976009, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
-  value: 60
+  lootName: METAL SHOES
+  lootDescription: 
+  lootType: 1
+  rarityType: 1
+  sprite: {fileID: 6190414075492916589, guid: f1c9dbb95a46b5245a91b44d8416364c, type: 3}
+  value: 50
   spaceTaken:
   - row: 01
-  equipmentType: 0
-  equipmentSprite: {fileID: 0}
-  healthUpgrade: 0
+  equipmentType: 3
+  equipmentSprite: {fileID: -6855505139983360341, guid: f1c9dbb95a46b5245a91b44d8416364c, type: 3}
+  healthUpgrade: 1
   strengthUpgrade: 0
-  speedUpgrade: 0
+  speedUpgrade: 1
   luckUpgrade: 0
   mpUpgrade: 0
   spUpgrade: 0
   equipmentEffectType: 0
   equipmentEffectAlteration: {fileID: 0}
   equipmentEffectPower: 0
-  consumableType: 2
-  consumablePower: 3
+  consumableType: 0
+  consumablePower: 0
   usableOutsideBattle: 0
-  additionalTooltipDatas: []
+  additionalTooltipDatas:
+  - {fileID: 11400000, guid: a3293f9b618695047ab630581c3aefb3, type: 2}

@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf4e25216f199bc41a77737520795259, type: 3}
-  m_Name: Headset2
+  m_Name: Headset3
   m_EditorClassIdentifier: 
-  lootName: CRISTAL HEADSET
-  lootDescription: When you get hit, you have a 50% chance to inflict Unlucky
+  lootName: METAL HEADSET
+  lootDescription: When you get hit, you have 25% chance to get Sturdy I
   lootType: 1
-  rarityType: 2
-  sprite: {fileID: -128178815, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
-  value: 100
+  rarityType: 1
+  sprite: {fileID: 3511361126315343885, guid: f1c9dbb95a46b5245a91b44d8416364c, type: 3}
+  value: 50
   spaceTaken:
   - row: 01
   equipmentType: 1
-  equipmentSprite: {fileID: -128178815, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
-  healthUpgrade: 1
+  equipmentSprite: {fileID: 3511361126315343885, guid: f1c9dbb95a46b5245a91b44d8416364c, type: 3}
+  healthUpgrade: 3
   strengthUpgrade: 0
   speedUpgrade: 0
-  luckUpgrade: 2
+  luckUpgrade: 0
   mpUpgrade: 0
   spUpgrade: 0
   equipmentEffectType: 2
-  equipmentEffectAlteration: {fileID: 11400000, guid: 69245b854151af14396500e9975c69b1, type: 2}
-  equipmentEffectPower: 50
+  equipmentEffectAlteration: {fileID: 11400000, guid: a4dccd989fc1ef24e9430b7dd0d6968f, type: 2}
+  equipmentEffectPower: 25
   consumableType: 0
   consumablePower: 0
   usableOutsideBattle: 0
   additionalTooltipDatas:
-  - {fileID: 11400000, guid: 59d881c1f4aa5014da46ae777fb2debb, type: 2}
+  - {fileID: 11400000, guid: 897d1c9dc66f4f8498b0d6dff76ac1dd, type: 2}

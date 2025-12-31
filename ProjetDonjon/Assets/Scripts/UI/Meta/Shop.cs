@@ -4,7 +4,8 @@ using System.Collections;
 using UnityEngine;
 using static UnityEditor.Progress;
 
-public class ShopMenu : MonoBehaviour
+
+public class ShopMenu : MonoBehaviour, ISaveable
 {
     [Header("Parameters")]
     [SerializeField] private Loot lootPrefab;
@@ -15,6 +16,9 @@ public class ShopMenu : MonoBehaviour
     public Action OnShow;
     public Action OnHide;
 
+    [Header("Private Infos")]
+    private int currentLevel;
+
     [Header("References")]
     [SerializeField] private MainMetaMenu _mainMetaMenu;
     [SerializeField] private RectTransform _mainRectTr;
@@ -22,10 +26,14 @@ public class ShopMenu : MonoBehaviour
     [SerializeField] private RectTransform _leftPosRectTr;
     [SerializeField] private ChestMenu _chestMenu;
     [SerializeField] private ShopRow[] _shopRows;
+    [SerializeField] private UpgradePanel _upgradePanel;
 
 
     private void Start()
     {
+        SaveManager.Instance.AddSaveableObject(this);
+        _upgradePanel.OnUpgrade += UpgradeShop;
+
         InitialiseShop();
     }
 
@@ -33,13 +41,15 @@ public class ShopMenu : MonoBehaviour
     {
         for(int i = 0; i < _shopRows.Length; i++)
         {
-            _shopRows[i].InitialiseRow(i != 0);
+            _shopRows[i].InitialiseRow(i > currentLevel);
 
             for(int j = 0; j < _shopRows[i].RowItems.Length; j++)
             {
                 _shopRows[i].RowItems[j].OnValidClick += TryToBuyItem;
             }
         }
+
+        _upgradePanel.DisplayLevel(currentLevel);
     }
 
 
@@ -61,6 +71,28 @@ public class ShopMenu : MonoBehaviour
 
         InventoriesManager.Instance.RemoveCoins(data.value);
     }
+
+
+    #region Camp Level
+
+    private void ActualiseLevel()
+    {
+        for (int i = 0; i < _shopRows.Length; i++)
+        {
+            _shopRows[i].InitialiseRow(i > currentLevel);
+        }
+
+        _upgradePanel.DisplayLevel(currentLevel);
+    }
+
+    private void UpgradeShop()
+    {
+        currentLevel++;
+
+        ActualiseLevel();
+    }
+
+    #endregion
 
 
     #region Show / Hide
@@ -102,6 +134,23 @@ public class ShopMenu : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         OnEndTransition.Invoke();
+    }
+
+    #endregion
+
+
+    #region Saves
+
+    public void LoadGame(GameData data)
+    {
+        currentLevel = data.shopLevel;
+
+        ActualiseLevel();
+    }
+
+    public void SaveGame(ref GameData data)
+    {
+        data.shopLevel = currentLevel;
     }
 
     #endregion

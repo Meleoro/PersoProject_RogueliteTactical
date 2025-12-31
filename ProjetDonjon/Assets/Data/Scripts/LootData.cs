@@ -6,7 +6,8 @@ public enum LootType
     Treasure,
     Equipment,
     Consumable,
-    Relic
+    Relic,
+    Material
 }
 
 public enum EquipmentType
@@ -44,6 +45,7 @@ public class LootData : ScriptableObject
     public string lootName;
     public string lootDescription;
     public LootType lootType;
+    public RarityType rarityType;
     public Sprite sprite;
     public int value;
     public SpaceTakenRow[] spaceTaken;

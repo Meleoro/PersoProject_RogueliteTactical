@@ -19,6 +19,7 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>
     [Header("Actions")]
     public Action OnInventoryOpen;
     public Action OnInventoryClose;
+    public Action OnInventoryChange;
 
     [Header("Private Infos")]
     private Inventory[] heroesInventories = new Inventory[3];
@@ -48,6 +49,7 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>
     [SerializeField] private GenericDetailsPanel _detailsPanel;
     [SerializeField] private InventoryActionPanel _inventoryActionsPanel;
     [SerializeField] private CoinUI _coinUI;
+    [SerializeField] private Inventory _chestInventory;
 
 
     private void Start()
@@ -102,14 +104,39 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>
         OpenInventories();
     }
 
+    // Called when a loot gets added to an inventory
     public void AddItem(Loot loot)
     {
         allLoots.Add(loot);
+
+        StartCoroutine(CallObserverWithDelayCoroutine());
     }
 
+    // Called when a loot gets removed to an inventory
     public void RemoveItem(Loot loot)
     {
         allLoots.Remove(loot);
+
+        StartCoroutine(CallObserverWithDelayCoroutine());
+    }
+
+    // Called when an item is used
+    public void DestroyItem(LootData item)
+    {
+        for(int i = 0; i < allLoots.Count; i++)
+        {
+            if(allLoots[i].LootData == item)
+            {
+                allLoots[i].DestroyItem();
+            }
+        }
+    }
+
+    private IEnumerator CallObserverWithDelayCoroutine()
+    {
+        yield return new WaitForSeconds(0.05f);
+
+        OnInventoryChange?.Invoke();
     }
 
 
@@ -227,6 +254,20 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>
 
 
     #region Others
+
+    public int GetItemCount(LootData material)
+    {
+        int currentCount = 0;
+
+        for(int i = 0; i < heroesInventories.Length; i++)
+        {
+            if (heroesInventories[i] == null) continue;
+            currentCount += heroesInventories[i].GetItemCount(material);
+        }
+
+        currentCount += _chestInventory.GetItemCount(material);
+        return currentCount;
+    }
 
     private IEnumerator SetupStartItemsCoroutine(Inventory inventoryPrefab, Hero hero)
     {

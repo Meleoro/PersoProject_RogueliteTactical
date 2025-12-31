@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 
-public class ChestMenu : MonoBehaviour
+public class ChestMenu : MonoBehaviour, ISaveable
 {
     [Header("Parameters")]
     [SerializeField] private float distanceBetweenSlots;
@@ -22,6 +22,7 @@ public class ChestMenu : MonoBehaviour
     [Header("Private Infos")]
     private Hero currentHero;
     private Inventory currentInventory;
+    private int currentLevel;
 
     [Header("References")]
     [SerializeField] private MainMetaMenu _mainMetaMenu;
@@ -32,12 +33,18 @@ public class ChestMenu : MonoBehaviour
     [SerializeField] private RectTransform _chestSlotsParent;
     [SerializeField] private RectTransform _lootParent;
     [SerializeField] private Inventory _chestInventory;
+    [SerializeField] private UpgradePanel _upgradePanel;
 
 
     private void Start()
     {
         _chestInventory.SetupPosition(null, null, _lootParent);
         _chestInventory.InitialiseInventory(null);
+
+        _upgradePanel.OnUpgrade += UpgradeChestInventory;
+        _upgradePanel.DisplayLevel(currentLevel);
+
+        SaveManager.Instance.AddSaveableObject(this);
     }
 
 
@@ -56,6 +63,15 @@ public class ChestMenu : MonoBehaviour
     }
 
 
+    private void UpgradeChestInventory()
+    {
+        currentLevel++;
+        _chestInventory.UpdateInventoryLevel(currentLevel);
+
+        _upgradePanel.DisplayLevel(currentLevel);
+    }
+
+
     #region Show / Hide
 
     public void Show()
@@ -71,13 +87,7 @@ public class ChestMenu : MonoBehaviour
 
     private IEnumerator ShowCoroutine()
     {
-        yield return new WaitForSeconds(0.3f);
-
-        _mainRectTr.DOMove(_middlePosRectTr.position + Vector3.left * 0.4f, 0.3f).SetEase(Ease.InOutSine);
-
-        yield return new WaitForSeconds(0.3f);
-
-        _mainRectTr.DOMove(_middlePosRectTr.position, 0.3f).SetEase(Ease.InOutSine);
+        _mainRectTr.DOMove(_middlePosRectTr.position, 0.3f).SetEase(Ease.OutCubic);
 
         yield return new WaitForSeconds(0.3f);
 
@@ -96,15 +106,29 @@ public class ChestMenu : MonoBehaviour
 
     private IEnumerator HideCoroutine()
     {
-        _mainRectTr.DOMove(_middlePosRectTr.position + Vector3.left * 0.4f, 0.3f).SetEase(Ease.InOutSine);
+        _mainRectTr.DOMove(_rightPosRectTr.position, 0.3f).SetEase(Ease.OutCubic);
 
         yield return new WaitForSeconds(0.3f);
 
-        _mainRectTr.DOMove(_rightPosRectTr.position, 0.3f).SetEase(Ease.InOutSine);
-
-        yield return new WaitForSeconds(0.6f);
-
         OnEndTransition.Invoke();
+    }
+
+    #endregion
+
+
+    #region Save
+
+    public void LoadGame(GameData data)
+    {
+        currentLevel = data.chestLevel;
+
+        _chestInventory.UpdateInventoryLevel(currentLevel);
+        _upgradePanel.DisplayLevel(currentLevel);
+    }
+
+    public void SaveGame(ref GameData data)
+    {
+        data.chestLevel = currentLevel;
     }
 
     #endregion

@@ -59,7 +59,7 @@ public class SaveManager : GenericSingletonClass<SaveManager>
 
     private void SetupSaveableObjects()
     {
-        saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToList();    
+        saveableObjects = FindObjectsByType<MonoBehaviour>(0).OfType<ISaveable>().ToList();    
     }
 
     public void AddSaveableObject(ISaveable obj)

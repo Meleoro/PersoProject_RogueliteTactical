@@ -15,8 +15,9 @@ MonoBehaviour:
   lootName: CRISTAL SHOES
   lootDescription: When you get hit, you have a 50% chance to gain Lucky
   lootType: 1
+  rarityType: 2
   sprite: {fileID: 2072245860, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
-  value: 50
+  value: 100
   spaceTaken:
   - row: 01
   equipmentType: 3

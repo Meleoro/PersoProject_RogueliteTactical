@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class GameData 
@@ -14,6 +15,8 @@ public class GameData
     // EQUIPMENT / RELICS / CAMP LEVEL
     public bool[] possessedRelicsIndexes;
     public int campLevel;
+    public int shopLevel;
+    public int chestLevel;
 
     // Others
     public bool[] finishedTutorialSteps;
@@ -33,6 +36,8 @@ public class GameData
 
         needEquippedInitialisation = true;
         campLevel = 0;
+        shopLevel = 0;
+        chestLevel = 0; 
 
         finishedTutorialSteps = new bool[30];
     }

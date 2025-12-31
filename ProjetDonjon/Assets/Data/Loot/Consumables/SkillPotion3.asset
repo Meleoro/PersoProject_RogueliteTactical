@@ -15,6 +15,7 @@ MonoBehaviour:
   lootName: STRONG SKILL POTION
   lootDescription: Restores all Skill Points
   lootType: 2
+  rarityType: 2
   sprite: {fileID: -1219877240, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
   value: 40
   spaceTaken:
@@ -25,5 +26,12 @@ MonoBehaviour:
   strengthUpgrade: 0
   speedUpgrade: 0
   luckUpgrade: 0
+  mpUpgrade: 0
+  spUpgrade: 0
+  equipmentEffectType: 0
+  equipmentEffectAlteration: {fileID: 0}
+  equipmentEffectPower: 0
   consumableType: 1
   consumablePower: -1
+  usableOutsideBattle: 0
+  additionalTooltipDatas: []
