@@ -23,6 +23,7 @@ public class ChestMenu : MonoBehaviour, ISaveable
     private Hero currentHero;
     private Inventory currentInventory;
     private int currentLevel;
+    private int currentInventoryIndex;
 
     [Header("References")]
     [SerializeField] private MainMetaMenu _mainMetaMenu;
@@ -32,6 +33,8 @@ public class ChestMenu : MonoBehaviour, ISaveable
     [SerializeField] private RectTransform _inventoryParent;
     [SerializeField] private RectTransform _chestSlotsParent;
     [SerializeField] private RectTransform _lootParent;
+    [SerializeField] private RectTransform _upArrow;
+    [SerializeField] private RectTransform _downArrow;
     [SerializeField] private Inventory _chestInventory;
     [SerializeField] private UpgradePanel _upgradePanel;
 
@@ -72,6 +75,52 @@ public class ChestMenu : MonoBehaviour, ISaveable
     }
 
 
+    #region Change Inventory Arrows
+
+    public void HoverArrow(bool upArrow)
+    {
+        if (upArrow)
+        {
+            _upArrow.DOScale(Vector3.one * 1.15f, 0.15f).SetEase(Ease.OutCubic);
+        }
+        else
+        {
+            _downArrow.DOScale(Vector3.one * 1.15f, 0.15f).SetEase(Ease.OutCubic);
+        }
+    }
+
+    public void UnhoverArrow(bool upArrow)
+    {
+        if (upArrow)
+        {
+            _upArrow.DOScale(Vector3.one * 1f, 0.15f).SetEase(Ease.OutCubic);
+        }
+        else
+        {
+            _downArrow.DOScale(Vector3.one * 1f, 0.15f).SetEase(Ease.OutCubic);
+        }
+    }
+
+    public void ClickArrow(bool upArrow)
+    {
+        if (upArrow)
+        {
+            currentInventoryIndex++;
+            currentInventoryIndex = currentInventoryIndex % HeroesManager.Instance.AllHeroes.Length;
+        }
+        else
+        {
+            currentInventoryIndex--;
+            if(currentInventoryIndex < 0) currentInventoryIndex = HeroesManager.Instance.AllHeroes.Length - 1;
+        }
+
+        currentHero = HeroesManager.Instance.AllHeroes[currentInventoryIndex]; 
+        LoadInventory();
+    }
+
+    #endregion
+
+
     #region Show / Hide
 
     public void Show()
@@ -79,7 +128,8 @@ public class ChestMenu : MonoBehaviour, ISaveable
         OnStartTransition.Invoke();
         OnShow.Invoke();
 
-        currentHero = HeroesManager.Instance.AllHeroes[0];
+        currentInventoryIndex = 0;
+        currentHero = HeroesManager.Instance.AllHeroes[currentInventoryIndex];
         LoadInventory();
 
         StartCoroutine(ShowCoroutine());

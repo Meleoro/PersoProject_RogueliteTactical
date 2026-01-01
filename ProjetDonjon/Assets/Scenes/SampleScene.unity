@@ -12474,7 +12474,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -230, y: -210}
-  m_SizeDelta: {x: 50, y: 46.875}
+  m_SizeDelta: {x: 40, y: 37.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1018801578
 MonoBehaviour:
@@ -12493,8 +12493,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1957708809}
-          m_TargetAssemblyTypeName: SkillsMenu, Assembly-CSharp
+        - m_Target: {fileID: 1870180015}
+          m_TargetAssemblyTypeName: ChestMenu, Assembly-CSharp
           m_MethodName: HoverArrow
           m_Mode: 6
           m_Arguments:
@@ -12509,8 +12509,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1957708809}
-          m_TargetAssemblyTypeName: SkillsMenu, Assembly-CSharp
+        - m_Target: {fileID: 1870180015}
+          m_TargetAssemblyTypeName: ChestMenu, Assembly-CSharp
           m_MethodName: UnhoverArrow
           m_Mode: 6
           m_Arguments:
@@ -12525,8 +12525,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1957708809}
-          m_TargetAssemblyTypeName: SkillsMenu, Assembly-CSharp
+        - m_Target: {fileID: 1870180015}
+          m_TargetAssemblyTypeName: ChestMenu, Assembly-CSharp
           m_MethodName: ClickArrow
           m_Mode: 6
           m_Arguments:
@@ -18799,7 +18799,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -230, y: 210}
-  m_SizeDelta: {x: 50, y: 46.875}
+  m_SizeDelta: {x: 40, y: 37.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1742190792
 MonoBehaviour:
@@ -18818,8 +18818,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1957708809}
-          m_TargetAssemblyTypeName: SkillsMenu, Assembly-CSharp
+        - m_Target: {fileID: 1870180015}
+          m_TargetAssemblyTypeName: ChestMenu, Assembly-CSharp
           m_MethodName: ClickArrow
           m_Mode: 6
           m_Arguments:
@@ -18834,8 +18834,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1957708809}
-          m_TargetAssemblyTypeName: SkillsMenu, Assembly-CSharp
+        - m_Target: {fileID: 1870180015}
+          m_TargetAssemblyTypeName: ChestMenu, Assembly-CSharp
           m_MethodName: UnhoverArrow
           m_Mode: 6
           m_Arguments:
@@ -18850,8 +18850,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1957708809}
-          m_TargetAssemblyTypeName: SkillsMenu, Assembly-CSharp
+        - m_Target: {fileID: 1870180015}
+          m_TargetAssemblyTypeName: ChestMenu, Assembly-CSharp
           m_MethodName: HoverArrow
           m_Mode: 6
           m_Arguments:
@@ -23163,6 +23163,8 @@ MonoBehaviour:
   _inventoryParent: {fileID: 2025951077}
   _chestSlotsParent: {fileID: 30136502}
   _lootParent: {fileID: 951718239}
+  _upArrow: {fileID: 1742190791}
+  _downArrow: {fileID: 1018801577}
   _chestInventory: {fileID: 891039554}
   _upgradePanel: {fileID: 476036738}
 --- !u!1 &1878309449
@@ -24052,17 +24054,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d46d09a17b0a65843bf1295390fd2dee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopRow
---- !u!114 &1957708809 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 219671660592645830, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
-  m_PrefabInstance: {fileID: 1816425686}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fc61074854867949a6ca25bb0a9bb59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1961790159
 GameObject:
   m_ObjectHideFlags: 0
