@@ -326,21 +326,21 @@ public class Unit : MonoBehaviour
         _animator.SetTrigger("Damage");
         CameraManager.Instance.DoCameraShake(0.2f, Mathf.Lerp(0.5f, 1f, damageAmount / 15f), 50);
 
-        // For no damages when the hero explores in the tuto
+        // No damages when the hero explores in the tuto
         if (!BattleManager.Instance.IsInBattle && TutoManager.Instance.IsInTuto)
         {
             StartCoroutine(DoColorEffectCoroutine(damageColor));
             return;
         }
 
-        // Thorn
+        // Thorn (damage applied to the attack origin unit)
         if (originUnit)
         {
             AlterationData thornAlt = VerifyHasAlteration(AlterationType.Thorn);
             if (thornAlt) originUnit.TakeDamage((int)thornAlt.strength, null);
         }
 
-        // Skulled
+        // Skulled (no damages + alteration removed)
         if (IsSkulled)
         {
             RemoveAlteration(AlterationType.Skulled);
@@ -661,7 +661,7 @@ public class Unit : MonoBehaviour
 
     private void HoverUnit()
     {
-        if (BattleManager.Instance.IsEnemyTurn) return;
+        if (BattleManager.Instance.IsEnemyTurn || !BattleManager.Instance.IsInBattle) return;
 
         isHovered = true;
 
@@ -670,7 +670,7 @@ public class Unit : MonoBehaviour
 
     private void UnHoverUnit()
     {
-        if (BattleManager.Instance.IsEnemyTurn) return;
+        if (BattleManager.Instance.IsEnemyTurn || !BattleManager.Instance.IsInBattle) return;
 
         isHovered = false;
 
@@ -786,12 +786,13 @@ public class Unit : MonoBehaviour
 
     protected IEnumerator DisappearCoroutine(float duration, bool destroy = true)
     {
-        BattleManager.Instance.RemoveUnit(this);
         _spriteRenderer.material.ULerpMaterialFloat(duration, -0.5f, "_DitherProgress");
 
         yield return new WaitForSeconds(duration);
 
-        if(destroy)
+        BattleManager.Instance.EndBattle();
+
+        if (destroy)
             Destroy(gameObject);
     }
 

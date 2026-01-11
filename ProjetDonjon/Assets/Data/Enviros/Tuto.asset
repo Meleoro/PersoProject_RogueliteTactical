@@ -16,6 +16,7 @@ MonoBehaviour:
   enviroDescription: THIS CRYPT FULL OF TREASURE IS ALSO HOME FOR A CIVILISATION
     OF GOBLINS, IT IS ALSO SAID THAT A DARK MAGE LURKS IN THE DEPTH OF THIS CRYPT
   enviroDangerText: LOW
+  enviroResourcesTexts: 
   enviroIllustration: {fileID: 7975086727044346999, guid: a70726b90ea81ae4ebcea3b9fc470dce, type: 3}
   enviroIndex: 0
   recommandedLevels: 010000000200000004000000050000000600000008000000
@@ -66,8 +67,14 @@ MonoBehaviour:
   possibleFirstBossRooms:
   - {fileID: 2917294264406634095, guid: 5cbe374aae63ec84195d013e30bd5ad4, type: 3}
   possibleSecondBossRooms: []
+  possibleCommonLoot:
+  - probability: 100
+    loot: {fileID: 11400000, guid: 97278269c2f0bdf48a7abf0cf71093c6, type: 2}
+  possibleRareLoot: []
+  possibleEpicLoot: []
+  possibleMysticLoot: []
   lootPerFloors:
-  - {fileID: 11400000, guid: 552fdf40ba613ba4798b39159b339ca9, type: 2}
+  - {fileID: 11400000, guid: 733fb0eb4a45f9f4684c53b3c516e4df, type: 2}
   - {fileID: 11400000, guid: c2e6cfa2e8d18214ea3f908b7db5ebd6, type: 2}
   - {fileID: 11400000, guid: 7456501236f695146b33097042b37c4b, type: 2}
   - {fileID: 11400000, guid: 9c07328acd89c8040b6d866114eaaf12, type: 2}

@@ -32,6 +32,7 @@ public class UIManager : GenericSingletonClass<UIManager>
     public FloorTransition FloorTransition { get { return _floorTransition; } }
     public HeroInfosScreen HeroInfosScreen { get { return _heroInfosScreen; } }
     public PlayerActionsMenu PlayerActionsMenu { get { return _playerActionsMenu; } }
+    public HUDExploration HUDExploration { get { return _hudExploration; } }
     public UIState CurrentUIState { get { return currentState; } }
 
     [Header("Actions")]
@@ -57,6 +58,7 @@ public class UIManager : GenericSingletonClass<UIManager>
     [SerializeField] private Minimap _minimap;
     [SerializeField] private FloorTransition _floorTransition;
     [SerializeField] private PlayerActionsMenu _playerActionsMenu;
+    [SerializeField] private HUDExploration _hudExploration;
 
     [Header("References Hero Infos")]
     [SerializeField] private HeroInfoPanel[] _heroInfoPanels1H;

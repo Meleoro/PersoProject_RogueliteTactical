@@ -309,8 +309,7 @@ public class BattleTile : MonoBehaviour
 
     public void UnhoverTile()
     {
-        if (BattleManager.Instance.IsEnemyTurn) return;
-
+        if (!isHovered) return;
         isHovered = false;
 
         StartCoroutine(VerifyQuitOverlayTile());
@@ -365,6 +364,9 @@ public class BattleTile : MonoBehaviour
 
         if (BattleManager.Instance.IsEnemyTurn) return;
         if (InputManager.wantsToRightClick) return;
+
+        if (unitOnTile && unitOnTile.GetType() == typeof(AIUnit) && BattleManager.Instance.TilesManager.CurrentSkill.mustTargetAlly
+            && (unitOnTile as AIUnit).IsEnemy) return;
 
         switch (currentTileState)
         {

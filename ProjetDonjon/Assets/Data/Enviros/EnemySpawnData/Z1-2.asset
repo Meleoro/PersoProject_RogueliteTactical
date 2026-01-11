@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   possibleEnemies:
   - enemyPrefab: {fileID: 4534582793652375552, guid: 70e303305ebdc8c468a69e20ccc80b88, type: 3}
-    proba: 25
+    proba: 15
     eliteProba: 0
     maxCountPerBattle: 3
     minEnemyCountBeforeSpawn: 0
   - enemyPrefab: {fileID: 4534582793652375552, guid: 8ecdeba3a3418884a8b2ac8e334f3640, type: 3}
-    proba: 25
+    proba: 20
     eliteProba: 0
     maxCountPerBattle: 3
     minEnemyCountBeforeSpawn: 0
@@ -29,17 +29,22 @@ MonoBehaviour:
     maxCountPerBattle: 1
     minEnemyCountBeforeSpawn: 1
   - enemyPrefab: {fileID: 4534582793652375552, guid: 7065f3b729656cf42a533cb15a42bdc1, type: 3}
-    proba: 15
+    proba: 20
     eliteProba: 0
-    maxCountPerBattle: 2
+    maxCountPerBattle: 3
     minEnemyCountBeforeSpawn: 0
-  - enemyPrefab: {fileID: 4534582793652375552, guid: 8c5a024bd4f75674fbbcb27a947021c7, type: 3}
-    proba: 10
+  - enemyPrefab: {fileID: 4534582793652375552, guid: 33d5baa09d638fe459cb3820acd8ee12, type: 3}
+    proba: 20
     eliteProba: 0
     maxCountPerBattle: 1
     minEnemyCountBeforeSpawn: 0
-  - enemyPrefab: {fileID: 4534582793652375552, guid: 33d5baa09d638fe459cb3820acd8ee12, type: 3}
+  - enemyPrefab: {fileID: 4534582793652375552, guid: 8c5a024bd4f75674fbbcb27a947021c7, type: 3}
     proba: 5
     eliteProba: 0
     maxCountPerBattle: 1
     minEnemyCountBeforeSpawn: 0
+  possibleChallengeEnemies: []
+  minDangerAmountPerBattle: 6
+  maxDangerAmountPerBattle: 10
+  minDangerAmountPerChallenge: 10
+  maxDangerAmountPerChallenge: 14

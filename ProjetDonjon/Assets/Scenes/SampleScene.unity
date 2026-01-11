@@ -16757,6 +16757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LootManager
   lootPrefab: {fileID: 6116046027794798314, guid: 8529cd8fcc49e9f4f958669b6e3cdac4, type: 3}
+  coinPrefab: {fileID: 4481646905077759251, guid: 387ecc4f9a2d12c4bbbe25e444bac85e, type: 3}
 --- !u!1 &1470582458
 GameObject:
   m_ObjectHideFlags: 0
@@ -19482,7 +19483,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5815120797572209803, guid: 83fe38d251e47e24e9821c429ff323e3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4772.9106
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5815120797572209803, guid: 83fe38d251e47e24e9821c429ff323e3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19775,6 +19776,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1070888251840669722, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1096865039522316244, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1134369441450297824, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
@@ -20449,6 +20454,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3041682449570149417, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3169006502548589947, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -20811,6 +20820,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4224374793588669604, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4284051497055851624, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4301753318840737939, guid: 7c1cc99ad1b0cb44e85a9427e7c4a134, type: 3}
@@ -22696,7 +22709,7 @@ Transform:
   m_GameObject: {fileID: 1862913652}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.56153774, y: -2.1474817, z: -1.0431175}
+  m_LocalPosition: {x: -0.56153774, y: -2.1474817, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24598,6 +24611,7 @@ MonoBehaviour:
   mainTutoSteps:
   - {fileID: 11400000, guid: 050011d897ec0054e9503478ec2b99c8, type: 2}
   - {fileID: 11400000, guid: 55a70c3241d6da74b87b272ae8284a86, type: 2}
+  - {fileID: 11400000, guid: 104020929d0644c408cbcc079478788b, type: 2}
   - {fileID: 11400000, guid: 7ed92725a880cb8408ac4ac61a4218b0, type: 2}
   - {fileID: 11400000, guid: d7a59de1a5b7f794da245ed4f6b83a73, type: 2}
   - {fileID: 11400000, guid: 9d48b0db8835c30459c2d727002458cc, type: 2}
@@ -24608,7 +24622,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a1541126b3b2abc4b8f2e28686d398e9, type: 2}
   - {fileID: 11400000, guid: 649c69c6c63355048acd838b92039ef3, type: 2}
   - {fileID: 11400000, guid: feebf14128cfa05409831113d8765ebb, type: 2}
-  disableTuto: 1
+  disableTuto: 0
   _leftPosRef: {fileID: 1921454748}
   _rightPosRef: {fileID: 1359650930}
   _tutorialPanel: {fileID: 805319899}

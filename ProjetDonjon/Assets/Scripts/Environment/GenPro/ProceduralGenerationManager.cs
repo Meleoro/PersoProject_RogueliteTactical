@@ -63,6 +63,8 @@ public class ProceduralGenerationManager : GenericSingletonClass<ProceduralGener
         {
             this.enviroData = tutoData;
 
+            LootManager.Instance.ActualiseInfos(tutoData, tutoData.lootPerFloors[currentFloor]);
+
             TutoManager.Instance.StartTutorial();
             GenerateTutorialFloor();
 

@@ -14,12 +14,15 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
 
     [Header("Public Infos")]
     public bool DidTutorial { get {  return didTutorial || disableTuto; } }
-    public bool DidBattleTuto { get {  return didTutorialStep[2]; } }
+    public bool[] DidTutorialStep { get {  return didTutorialStep; } }
+    public bool DidBattleTuto { get {  return didTutorialStep[4]; } }
+    public bool IsDisplayingTuto { get {  return isDisplayingTuto; } }
     public bool IsInTuto { get {  return didTutorialStep[0] && !didTutorialStep[10]; } }
 
     [Header("Private Infos")]
     private bool[] didTutorialStep;
     private bool didTutorial;
+    private bool isDisplayingTuto;
     private TutoStepData currentStep;
     private int currentTutoID;
     private bool[] endConditionsValidated;
@@ -49,8 +52,10 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
         if (didTutorialStep[tutoID]) return;
         if (disableTuto) return;
 
+        isDisplayingTuto = true;
+
         // To avoid having the camera moving in battle
-        if(BattleManager.Instance.IsInBattle)
+        if (BattleManager.Instance.IsInBattle)
             CameraManager.Instance.LockCameraInputs();
 
         didTutorialStep[tutoID] = true;
@@ -118,7 +123,32 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
                 GameManager.Instance.OnReturnToCamp += ValidateEndCondition;
                 endConditionsValidated = new bool[1];
                 break;
+
+            case TutoEndCondition.PlaceItemInInventory:
+                FindAnyObjectByType<Loot>().OnPlaceInInventory += ValidateEndCondition;
+                endConditionsValidated = new bool[1];
+
+                InventoriesManager.Instance.LockInventory();
+                break;
+
+            case TutoEndCondition.EquipEquiment:
+                UIManager.Instance.HeroInfosScreen.OnShow += ValidateEndCondition;
+                InventoriesManager.Instance.OnInventoryClose -= DoEquipmentTutorial;
+                endConditionsValidated = new bool[1];
+                break;
         }
+    }
+
+    private void ValidateEndCondition()
+    {
+        endConditionsValidated[0] = true;
+
+        for (int i = 0; i < endConditionsValidated.Length; i++)
+        {
+            if (!endConditionsValidated[i]) return;
+        }
+
+        _tutorialPanel.HideTutorial();
     }
 
     private void ValidateEndCondition(int actionType)
@@ -138,6 +168,7 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
 
     private void EndTutorialStep()
     {
+        isDisplayingTuto = false;
         _tutorialPanel.OnHide -= EndTutorialStep;
 
         CameraManager.Instance.UnlockCameraInputs();
@@ -180,6 +211,17 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
             case TutoEndCondition.ReturnToCamp:
                 GameManager.Instance.OnReturnToCamp -= ValidateEndCondition;
                 break;
+
+            case TutoEndCondition.PlaceItemInInventory:
+                FindAnyObjectByType<Loot>().OnPlaceInInventory -= ValidateEndCondition;
+                InventoriesManager.Instance.OnInventoryClose += DoEquipmentTutorial;
+
+                InventoriesManager.Instance.UnlockInventory();
+                break;
+
+            case TutoEndCondition.EquipEquiment:
+                UIManager.Instance.HeroInfosScreen.OnShow -= ValidateEndCondition;
+                break;
         }
 
         if (!currentStep.playNextStepOnFinished) 
@@ -191,13 +233,17 @@ public class TutoManager : GenericSingletonClass<TutoManager>, ISaveable
     }
 
 
+    private void DoEquipmentTutorial()
+    {
+        StartCoroutine(DisplayTutorialWithDelayCoroutine(3, 0.6f));
+    }
     private void DoSecondBattleTutorial()
     {
-        StartCoroutine(DisplayTutorialWithDelayCoroutine(6, 0.6f));
+        StartCoroutine(DisplayTutorialWithDelayCoroutine(7, 0.6f));
     }
     private void DoThirdBattleTutorial()
     {
-        StartCoroutine(DisplayTutorialWithDelayCoroutine(8, 0.5f));
+        StartCoroutine(DisplayTutorialWithDelayCoroutine(9, 0.5f));
     }
 
 

@@ -33,7 +33,6 @@ public class ChallengeChest : MonoBehaviour, IInteractible
     private void GenerateLoot()
     {
         LootManager.Instance.SpawnLootChallengeEnd(transform.position);
-        LootManager.Instance.SpawnLootChallengeEnd(transform.position);
     }
 
 
@@ -69,6 +68,7 @@ public class ChallengeChest : MonoBehaviour, IInteractible
         _spriteRenderer.material.ULerpMaterialFloat(0.5f, displayedDitherValue, "_DitherProgress");
 
         _shadowSpriteRenderer.enabled = true;
+        BattleManager.Instance.OnBattleEnd -= Show;
 
         StartCoroutine(InteractCoroutine(1.5f));
     }

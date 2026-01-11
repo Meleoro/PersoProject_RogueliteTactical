@@ -21,6 +21,7 @@ MonoBehaviour:
   value: 100
   spaceTaken:
   - row: 01
+  - row: 01
   equipmentType: 3
   equipmentSprite: {fileID: 161968315, guid: 16de10eb8fea91941a2ac66a7f57eefc, type: 3}
   healthUpgrade: 0

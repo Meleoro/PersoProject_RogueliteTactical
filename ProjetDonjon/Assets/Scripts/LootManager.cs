@@ -6,6 +6,7 @@ public class LootManager : GenericSingletonClass<LootManager>
 {
     [Header("Parameters")]
     [SerializeField] private Loot lootPrefab;
+    [SerializeField] private Coin coinPrefab;
 
     [Header("Private Infos")]
     private EnviroData currentEnviroData;
@@ -23,17 +24,62 @@ public class LootManager : GenericSingletonClass<LootManager>
 
     public void SpawnLootChest(Vector2 spawnPosition)
     {
-        SpawnLoot(currentFloorLootData.probaPerTierChest, spawnPosition);
+        // Main loot
+        int spawnedLootAmount = Random.Range(currentFloorLootData.minLootAmountPerChest, currentFloorLootData.maxLootAmountPerChest + 1);
+         
+        for(int i = 0; i < spawnedLootAmount; i++)
+        {
+            SpawnLoot(currentFloorLootData.probaPerTierChest, spawnPosition);
+        }
+
+        // Coins
+        int pickedCoinsAmount = Random.Range(currentFloorLootData.minChestCoins, currentFloorLootData.maxChestCoins);
+
+        for (int i = 0; i < pickedCoinsAmount; i++)
+        {
+            Coin coin = Instantiate(coinPrefab, spawnPosition, Quaternion.Euler(0, 0, 0), UIManager.Instance.CoinUI.transform);
+            coin.transform.position = spawnPosition;
+        }
     }
 
     public void SpawnLootBattleEnd(Vector2 spawnPosition)
     {
-        SpawnLoot(currentFloorLootData.probaPerTierBattle, spawnPosition);
+        // Main loot
+        int spawnedLootAmount = Random.Range(currentFloorLootData.minLootAmountPerBattle, currentFloorLootData.maxLootAmountPerBattle + 1);
+
+        for (int i = 0; i < spawnedLootAmount; i++)
+        {
+            SpawnLoot(currentFloorLootData.probaPerTierBattle, spawnPosition);
+        }
+        
+        // Coins
+        int pickedCoinsAmount = Random.Range(currentFloorLootData.minBattleCoins, currentFloorLootData.maxBattleCoins);
+
+        for (int i = 0; i < pickedCoinsAmount; i++)
+        {
+            Coin coin = Instantiate(coinPrefab, spawnPosition, Quaternion.Euler(0, 0, 0), UIManager.Instance.CoinUI.transform);
+            coin.transform.position = spawnPosition;
+        }
     }
 
     public void SpawnLootChallengeEnd(Vector2 spawnPosition)
     {
-        SpawnLoot(currentFloorLootData.probaPerTierChallenge, spawnPosition);
+        // Main loot
+        int spawnedLootAmount = Random.Range(currentFloorLootData.minLootAmountPerChallenge, currentFloorLootData.maxLootAmountPerChallenge + 1);
+
+        for (int i = 0; i < spawnedLootAmount; i++)
+        {
+            SpawnLoot(currentFloorLootData.probaPerTierChallenge, spawnPosition);
+        }
+
+        // Coins
+        int pickedCoinsAmount = Random.Range(currentFloorLootData.minChallengeCoins, currentFloorLootData.maxChallengeCoins);
+
+        for (int i = 0; i < pickedCoinsAmount; i++)
+        {
+            Coin coin = Instantiate(coinPrefab, spawnPosition, Quaternion.Euler(0, 0, 0), UIManager.Instance.CoinUI.transform);
+            coin.transform.position = spawnPosition;
+        }
     }
 
     #endregion

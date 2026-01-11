@@ -8,6 +8,10 @@ public class HUDExploration : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] private float overlayEffectDuration;
 
+    [Header("Public Infos")]
+    public Image EquipmentMenuImage { get { return _buttonsImages[1]; } }
+    public Animator Animator { get { return _animator; } }
+
     [Header("Private Infos")]
     private bool isDisplayed;
 

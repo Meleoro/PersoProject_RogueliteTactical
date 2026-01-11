@@ -420,10 +420,11 @@ public class AIUnit : Unit
         currentTile.UnitLeaveTile();
 
         AudioManager.Instance.PlaySoundOneShot(2, 10);
-
         HeroesManager.Instance.SpawnXP(AIData.minXpDrop, transform.position);
 
-        if(BattleManager.Instance.CurrentEnemies.Count == 1 || isBoss)
+        BattleManager.Instance.RemoveUnit(this);
+
+        if (BattleManager.Instance.CurrentEnemies.Count == 0 || isBoss)
         {
             StartCoroutine(LastEnemyDisappearCoroutine(2f));
         }

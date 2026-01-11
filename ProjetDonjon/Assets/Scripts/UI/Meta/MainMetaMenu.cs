@@ -233,7 +233,7 @@ public class MainMetaMenu : MonoBehaviour
 
         if (RelicsManager.Instance.VerifyHasCampUpgrade(CampLevelData.CampUnlockType.Blacksmith))
         {
-            _shopLock.Unlock(true);
+            _smithLock.Unlock(true);
         }
 
         _campLevelProgressBar.fillAmount = currentRelicCount / campLevels[currentCampLevel].neededRelicCount;
@@ -284,23 +284,25 @@ public class MainMetaMenu : MonoBehaviour
 
         // If we gain a new level
         _campLevelProgressBar.fillAmount = 0;
-        _campLevelMainText.text = "CAMP LEVEL " + ++currentCampLevel;
-        _campLevelProgressText.text = campLevels[currentCampLevel - 1].neededRelicCount + "/" + campLevels[currentCampLevel - 1].neededRelicCount;
+        _campLevelMainText.text = "CAMP LEVEL " + (currentCampLevel + 1);
+        _campLevelProgressText.text = campLevels[currentCampLevel].neededRelicCount + "/" + campLevels[currentCampLevel].neededRelicCount;
 
-        _popUp.DisplayPopUp(campLevels[currentCampLevel - 1]);
+        _popUp.DisplayPopUp(campLevels[currentCampLevel]);
         _popUp.OnHide += ContinueProgress;
 
         RelicsManager.Instance.CampLevelUp();
 
-        if (campLevels[currentCampLevel - 1].unlockType == CampLevelData.CampUnlockType.Shop)
+        if (campLevels[currentCampLevel].unlockType == CampLevelData.CampUnlockType.Shop)
         {
             _shopLock.Unlock(false);
         }
 
-        else if (campLevels[currentCampLevel - 1].unlockType == CampLevelData.CampUnlockType.Blacksmith)
+        else if (campLevels[currentCampLevel].unlockType == CampLevelData.CampUnlockType.Blacksmith)
         {
             _smithLock.Unlock(false);
         }
+
+        currentCampLevel++;
     }
 
     public void ContinueProgress()

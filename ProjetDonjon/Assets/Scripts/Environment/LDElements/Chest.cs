@@ -32,16 +32,6 @@ public class Chest : MonoBehaviour, IInteractible
     private void GenerateLoot()
     {
         LootManager.Instance.SpawnLootChest(transform.position);
-        if(Random.Range(0, 2) == 0) LootManager.Instance.SpawnLootChest(transform.position);    // 50% chance to get second loot
-
-        int pickedCoinsAmount = Random.Range(ProceduralGenerationManager.Instance.EnviroData.lootPerFloors[ProceduralGenerationManager.Instance.CurrentFloor].minChestCoins,
-            ProceduralGenerationManager.Instance.EnviroData.lootPerFloors[ProceduralGenerationManager.Instance.CurrentFloor].maxChestCoins);
-
-        for(int i = 0; i < pickedCoinsAmount; i++)
-        {
-            Coin coin = Instantiate(coinPrefab, transform.position, Quaternion.Euler(0, 0, 0), UIManager.Instance.CoinUI.transform);
-            coin.transform.position = transform.position;
-        }
     }
 
 

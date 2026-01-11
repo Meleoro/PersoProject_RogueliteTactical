@@ -12121,7 +12121,7 @@ MonoBehaviour:
   _minimap: {fileID: 2600933081750961809}
   _floorTransition: {fileID: 939981192782512149}
   _playerActionsMenu: {fileID: 5180609351778176802}
-  _hudExploration: {fileID: 0}
+  _hudExploration: {fileID: 6283850508246355928}
   _heroInfoPanels1H:
   - {fileID: 2662905831428831098}
   _heroInfoPanelsAnimator1H: {fileID: 5470279092063729061}
@@ -18764,7 +18764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 11.699982, y: 211.87999}
+  m_AnchoredPosition: {x: 11.699982, y: 211.88}
   m_SizeDelta: {x: 368.09998, y: 700}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &219194172111049252

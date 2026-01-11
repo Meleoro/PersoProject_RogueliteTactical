@@ -190,6 +190,10 @@ public class HeroesManager : GenericSingletonClass<HeroesManager>, ISaveable
         heroes = heroesList.ToArray();
     }
 
+    #endregion
+
+
+    #region Exploration 
 
     public void StartExploration(Vector2 spawnPos)
     {
@@ -227,10 +231,6 @@ public class HeroesManager : GenericSingletonClass<HeroesManager>, ISaveable
 
     public void Teleport(Vector3 position)
     {
-        //if (!isInitialised) return;
-
-        Debug.Log(position);
-
         heroes[currentHeroIndex].transform.position = position;
     }
 

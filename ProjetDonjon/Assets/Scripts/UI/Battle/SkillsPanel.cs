@@ -17,6 +17,7 @@ public class SkillsPanel : MonoBehaviour
     private Hero currentHero;
     private SkillsPanelButton currentButtonSkill;
     private bool isOpenned;
+    private SkillsPanelButton lockedButton;
 
     [Header("References")]
     [SerializeField] private SkillsPanelButton[] _skillButtons;
@@ -34,12 +35,14 @@ public class SkillsPanel : MonoBehaviour
         {
             _skillButtons[i].OnButtonClick += ClickButton;
             _skillButtons[i].OnSkillOverlay += LoadSkillDetails;
-            _skillButtons[i].OnSkillQuitOverlay += UnlaodSkillDetails;
+            _skillButtons[i].OnSkillQuitOverlay += UnloadSkillDetails;
         }
 
         BattleManager.Instance.OnSkillUsed += CloseSkillsPanel;
     }
 
+
+    #region Open / Close
 
     public void OpenSkillsPanel(Hero hero)
     {
@@ -77,22 +80,21 @@ public class SkillsPanel : MonoBehaviour
         _animator.SetBool("IsOpenned", false);
     }
 
+    #endregion
+
+
+    // For tuto 
+    public void LockOption(int index)
+    {
+        lockedButton = _skillButtons[index];
+    }
 
 
     private void ClickButton(SkillsPanelButton button)
     {
+        if (lockedButton == button) return;
+
         OnLaunchSkill.Invoke();
-        currentButtonSkill = button;
-    }
-
-
-    private void ClickButtonOld(SkillsPanelButton button)
-    {
-        if (currentButtonSkill != null)
-        {
-            currentButtonSkill.Unclick();
-        }
-
         currentButtonSkill = button;
     }
 
@@ -112,7 +114,7 @@ public class SkillsPanel : MonoBehaviour
         }
     }
 
-    private void UnlaodSkillDetails()
+    private void UnloadSkillDetails()
     {
         if(currentButtonSkill != null)
         {

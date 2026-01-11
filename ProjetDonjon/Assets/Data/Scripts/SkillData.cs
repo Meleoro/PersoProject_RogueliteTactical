@@ -51,9 +51,10 @@ public class SkillData : ScriptableObject
 {
     [Header("Main")]
     public string skillName;
-    [TextArea]public string skillDescription;
+    [TextArea] public string skillDescription;
     public string animName;
     public int skillPointCost;
+    public bool mustTargetAlly;
     public Sprite skillIcon;
     public Sprite skillHighlightIcon;
     public AdditionalTooltipData[] additionalTooltipDatas;

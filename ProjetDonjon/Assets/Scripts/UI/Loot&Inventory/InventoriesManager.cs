@@ -33,6 +33,7 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>, ISa
     private int inventoryInstantiatedAmount = 0;
     private int currentCoins;
     private bool alreadyLoadedSave;
+    private bool lockedInInventory;
 
     [Header("Public Infos")]
     public RectTransform MainLootParent { get { return _mainLootParent; } }
@@ -201,23 +202,15 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>, ISa
         return true;
     }
 
-
-    public IEnumerator OpenInventory(Inventory inventoryToOpen)
+    public void LockInventory()
     {
-        StartCoroutine(inventoryToOpen.OpenInventoryCoroutine(openEffectDuration, _leftHiddenPosition, _leftShownPosition));
-
-        yield return new WaitForSeconds(openEffectDuration);
+        lockedInInventory = true;
     }
 
-    public IEnumerator CloseInventory(Inventory inventoryToClose)
+    public void UnlockInventory()
     {
-        StartCoroutine(inventoryToClose.CloseInventoryCoroutine(closeEffectDuration, _leftHiddenPosition));
-
-        _inventoryActionsPanel.ClosePanel();
-
-        yield return new WaitForSeconds(closeEffectDuration);
+        lockedInInventory = false;
     }
-
 
     public async void OpenInventories()
     {
@@ -242,6 +235,8 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>, ISa
 
     public async void CloseInventories()
     {
+        if (lockedInInventory) return;
+
         OnInventoryClose?.Invoke();
 
         _inventoryActionsPanel.ClosePanel();
@@ -256,6 +251,22 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>, ISa
         {
             StartCoroutine(currentHeroesInventories[i].CloseInventoryCoroutine(closeEffectDuration));
         }
+    }
+
+    public IEnumerator OpenInventory(Inventory inventoryToOpen)
+    {
+        StartCoroutine(inventoryToOpen.OpenInventoryCoroutine(openEffectDuration, _leftHiddenPosition, _leftShownPosition));
+
+        yield return new WaitForSeconds(openEffectDuration);
+    }
+
+    public IEnumerator CloseInventory(Inventory inventoryToClose)
+    {
+        StartCoroutine(inventoryToClose.CloseInventoryCoroutine(closeEffectDuration, _leftHiddenPosition));
+
+        _inventoryActionsPanel.ClosePanel();
+
+        yield return new WaitForSeconds(closeEffectDuration);
     }
 
     #endregion
@@ -355,7 +366,7 @@ public class InventoriesManager : GenericSingletonClass<InventoriesManager>, ISa
         for (int i = 0; i < allLoots.Count; i++)
         {
             string itemID = allLoots[i].LootData.lootName;
-            int inventoryID = -1;
+            int inventoryID = -1;    // Chest Inventory Index
             if (allLoots[i].AssociatedHero is not null) inventoryID = allLoots[i].AssociatedHero.HeroIndex;
             Vector2Int coord = allLoots[i].BottomLeftSlot.SlotCoordinates;
             int angle = allLoots[i].CurrentAngle;

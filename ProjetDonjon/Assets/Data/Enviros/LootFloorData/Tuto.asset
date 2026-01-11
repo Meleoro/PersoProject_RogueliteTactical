@@ -26,6 +26,8 @@ MonoBehaviour:
     loot: {fileID: 11400000, guid: 6f0aa61029427f444b8a275c8060a241, type: 2}
   minChestCoins: 4
   maxChestCoins: 7
+  minLootAmountPerChest: 1
+  maxLootAmountPerChest: 1
   probaPerTierBattle: 64000000000000000000000000000000
   battleEndPossibleLoots:
   - probability: 100
@@ -38,6 +40,8 @@ MonoBehaviour:
     loot: {fileID: 11400000, guid: b34ba33fc8826fd44a2ea8b0b5747196, type: 2}
   minBattleCoins: 2
   maxBattleCoins: 5
+  minLootAmountPerBattle: 0
+  maxLootAmountPerBattle: 0
   probaPerTierChallenge: 
   challengeEndPossibleLoots:
   - probability: 20
@@ -52,3 +56,5 @@ MonoBehaviour:
     loot: {fileID: 11400000, guid: 958a5b169ab7298438b75a782fd839da, type: 2}
   minChallengeCoins: 6
   maxChallengeCoins: 9
+  minLootAmountPerChallenge: 0
+  maxLootAmountPerChallenge: 0

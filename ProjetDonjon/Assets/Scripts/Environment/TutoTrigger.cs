@@ -4,11 +4,33 @@ public class TutoTrigger : MonoBehaviour
 {
     [Header("Parameters")]
     [SerializeField] private int tutoID;
+    [SerializeField] private int neededTutoIDToContinue;
+
+    [Header("References")]
+    [SerializeField] private BoxCollider2D blockCollider;
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag != "Hero") return;
 
         TutoManager.Instance.DisplayTutorial(tutoID);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag != "Hero") return;
+        if (!TutoManager.Instance.DidTutorialStep[neededTutoIDToContinue] || TutoManager.Instance.IsDisplayingTuto) return;
+
+        Destroy(gameObject);
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag != "Hero") return;
+        if (!TutoManager.Instance.DidTutorialStep[neededTutoIDToContinue] || TutoManager.Instance.IsDisplayingTuto) return;
+
+        Destroy(gameObject);
     }
 }

@@ -15,10 +15,13 @@ public class TutorialPanel : MonoBehaviour
 
     [Header("Private Infos")]
     private TutoStepData currentTutoData;
-    private Image[] highlightedImages;
+    private Image[] highlightedImages = new Image[0];
     private Transform originalParent;
+    private Vector3[] originalPositions;
+    private Vector3[] originalLocalPositions;
     private bool isDisplayingTileHighlight;
     private bool isDisplayingSkillHighlight;
+    private bool maintainPosition;
 
     [Header("References")]
     [SerializeField] private TextMeshProUGUI _stepNameText;
@@ -32,6 +35,24 @@ public class TutorialPanel : MonoBehaviour
     [SerializeField] private SkillsPanelButton _skillsPanelFirstButton;
     [SerializeField] private SkillsPanelButton _skillsPanelSecondButton;
 
+
+
+    private void Update()
+    {
+        // To maintain the right depth
+        for (int i = 0; i < highlightedImages.Length; i++)
+        {
+            highlightedImages[i].rectTransform.position = new Vector3(highlightedImages[i].rectTransform.position.x, 
+                highlightedImages[i].rectTransform.position.y, 0);
+        }
+
+        if (!maintainPosition) return;
+
+        for (int i = 0; i < highlightedImages.Length; i++)
+        {
+            highlightedImages[i].rectTransform.position = new Vector3(originalPositions[i].x, originalPositions[i].y, 0);
+        }
+    }
 
 
     public void DisplayTutorial(TutoStepData tutoData)
@@ -62,6 +83,9 @@ public class TutorialPanel : MonoBehaviour
         if (currentTutoData.highlightType == TutoHighlightType.None)
         {
             _backDarkImage.DOFade(0.3f, 0.2f).SetEase(Ease.OutBack);
+
+            _backDarkImage.raycastTarget = false;
+
             return;
         }
         _backDarkImage.DOFade(0.7f, 0.2f).SetEase(Ease.OutBack);
@@ -69,19 +93,23 @@ public class TutorialPanel : MonoBehaviour
         switch (currentTutoData.highlightType)
         {
             case TutoHighlightType.HighlightActionPoints:
+                maintainPosition = true;
                 highlightedImages = UIManager.Instance.PlayerActionsMenu.ActionPointImages;
                 break;
 
             case TutoHighlightType.HighlightSkillPoints:
+                maintainPosition = true;
                 highlightedImages = UIManager.Instance.PlayerActionsMenu.SkillPointImages;
                 break;
 
             case TutoHighlightType.HighlightMoveButton:
+                //maintainPosition = true;
                 highlightedImages = new Image[] { UIManager.Instance.PlayerActionsMenu.ButtonImages[0] };
                 TutoManager.Instance.OnFirstStepValidated += HighlightMoveTile;
                 break;
 
             case TutoHighlightType.HighlightSkillButton:
+                maintainPosition = true;
                 highlightedImages = new Image[] { UIManager.Instance.PlayerActionsMenu.ButtonImages[1] };
                 TutoManager.Instance.OnFirstStepValidated += HighlightFirstSkillSkill;
                 break;
@@ -100,14 +128,31 @@ public class TutorialPanel : MonoBehaviour
                 _backDarkImage.DOComplete();
                 _backDarkImage.DOFade(0.7f, 0.2f).SetEase(Ease.OutBack);
                 break;
+
+            case TutoHighlightType.HighlightEquipmentMenu:
+                UIManager.Instance.HUDExploration.Animator.enabled = false;
+                highlightedImages = new Image[] { UIManager.Instance.HUDExploration.EquipmentMenuImage };
+
+                _backDarkImage.DOComplete();
+                _backDarkImage.DOFade(0.7f, 0.2f).SetEase(Ease.OutBack);
+                break;
         }
 
-        if (highlightedImages.Length == 0) return;
+        if (highlightedImages.Length == 0)
+            return;
 
+        originalPositions = new Vector3[highlightedImages.Length];
+        originalLocalPositions = new Vector3[highlightedImages.Length];
         originalParent = highlightedImages[0].rectTransform.parent;
+
         for(int i = 0; i < highlightedImages.Length; i++)
         {
-            highlightedImages[i].rectTransform.parent = _highlightParent;
+            originalPositions[i] = highlightedImages[i].rectTransform.position;
+            originalLocalPositions[i] = highlightedImages[i].rectTransform.localPosition;
+
+            highlightedImages[i].rectTransform.SetParent(_highlightParent, true);
+
+            highlightedImages[i].rectTransform.position = new Vector3(originalPositions[i].x, originalPositions[i].y, 0);
         }
     }
 
@@ -154,9 +199,13 @@ public class TutorialPanel : MonoBehaviour
     {
         if (currentTutoData.highlightType == TutoHighlightType.None) return;
 
+        maintainPosition = false;
+        UIManager.Instance.HUDExploration.Animator.enabled = true;
+
         for (int i = 0; i < highlightedImages.Length; i++)
         {
-            highlightedImages[i].rectTransform.parent = originalParent;
+            highlightedImages[i].rectTransform.SetParent(originalParent);
+            highlightedImages[i].rectTransform.localPosition = originalLocalPositions[i];
         }
 
         if (isDisplayingTileHighlight)

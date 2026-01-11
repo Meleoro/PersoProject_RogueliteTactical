@@ -71,11 +71,6 @@ public class BattleManager : GenericSingletonClass<BattleManager>
     private void Update()
     {
         if (!isInBattle) return;
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            EndBattle();    
-        }
     }
 
 
@@ -129,16 +124,6 @@ public class BattleManager : GenericSingletonClass<BattleManager>
                 currentHeroes.Remove(unit);
                 currentAllies.Remove((AIUnit)unit);
             }
-
-            if (currentEnemies.Count == 0 || ((AIUnit)unit).IsBoss)
-            {
-                EndBattle();
-            }
-        }
-
-        if(currentHeroes.Count == 0)
-        {
-            //GameOver
         }
     }
 
@@ -189,17 +174,10 @@ public class BattleManager : GenericSingletonClass<BattleManager>
         StartCoroutine(NextTurnCoroutine(0, false));
     }
 
-    private void EndBattle()
+    public void EndBattle()
     {
         battleRoom.EndBattle();
         OnBattleEnd.Invoke();
-
-        for (int i = deadHeroes.Count() - 1; i >= 0; i--)
-        {
-            //deadHeroes[i].HideOutline();
-            //deadHeroes[i].Heal(1);
-        }
-        //deadHeroes.Clear();
 
         for (int i = 0; i < currentAllies.Count; i++)
         {
@@ -215,6 +193,7 @@ public class BattleManager : GenericSingletonClass<BattleManager>
         HeroesManager.Instance.ExitBattle();
 
         _timeline.Disappear();
+        _playerActionsMenu.CloseActionsMenu();
     }
 
     public void AllHeroDefeatEndBattle()
@@ -237,29 +216,15 @@ public class BattleManager : GenericSingletonClass<BattleManager>
             newRelic.Initialise(relicData);
         }
 
-        // Loot Spawn
+        // Items + Coins Spawn
         LootManager.Instance.SpawnLootBattleEnd(lastUnit.transform.position);
-        if (lastUnit.IsBoss)
-        {
-            LootManager.Instance.SpawnLootBattleEnd(lastUnit.transform.position);
-        }
-
-        // Coin Spawn
-        int pickedCoinsAmount = Random.Range(ProceduralGenerationManager.Instance.EnviroData.lootPerFloors[ProceduralGenerationManager.Instance.CurrentFloor].minBattleCoins,
-            ProceduralGenerationManager.Instance.EnviroData.lootPerFloors[ProceduralGenerationManager.Instance.CurrentFloor].maxBattleCoins);
-
-        for (int i = 0; i < pickedCoinsAmount; i++)
-        {
-            Coin coin = Instantiate(coinPrefab, transform.position, Quaternion.Euler(0, 0, 0), UIManager.Instance.CoinUI.transform);
-            coin.transform.position = transform.position;
-        }
     }
 
     public void StartBattleEndCutscene()
     {
         isInBattle = false;
 
-        //UIManager.Instance.HideHeroInfosPanels();
+        _timeline.Disappear();
         _playerActionsMenu.CloseActionsMenu();
     }
 

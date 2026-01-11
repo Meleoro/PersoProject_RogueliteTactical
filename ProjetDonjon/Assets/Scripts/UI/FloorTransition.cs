@@ -45,6 +45,10 @@ public class FloorTransition : MonoBehaviour
         buttonsRectTr[0] = _continueButtonText.GetComponent<RectTransform>();
         buttonsRectTr[1] = _stopButtonText.GetComponent<RectTransform>();
         buttonsRectTr[2] = _backToCampText.GetComponent<RectTransform>();
+
+        _continueButton.gameObject.SetActive(false);
+        _stopButton.gameObject.SetActive(false);
+        _backToCampButton.gameObject.SetActive(false);
     }
 
     public void StartTransition(EnviroData enviroData, int floorIndex)
@@ -62,6 +66,7 @@ public class FloorTransition : MonoBehaviour
 
             _continueButton.gameObject.SetActive(false);
             _stopButton.gameObject.SetActive(false);
+            _backToCampButton.gameObject.SetActive(false);
 
             _flootCounterText.text = (floorIndex + 1).ToString();
 
@@ -77,12 +82,10 @@ public class FloorTransition : MonoBehaviour
 
             _continueButton.gameObject.SetActive(true);
             _stopButton.gameObject.SetActive(true);
+            _backToCampButton.gameObject.SetActive(false);
 
             _continueButtonText.color = new Color(_continueButtonText.color.r, _continueButtonText.color.g, _continueButtonText.color.b, 0);
             _stopButtonText.color = new Color(_continueButtonText.color.r, _continueButtonText.color.g, _continueButtonText.color.b, 0);
-
-            _continueButton.enabled = true;
-            _stopButton.enabled = true;
 
             StartCoroutine(ChangeFloorCoroutine(floorIndex, 3.5f));
         }
@@ -95,6 +98,7 @@ public class FloorTransition : MonoBehaviour
 
         _continueButton.gameObject.SetActive(false);
         _stopButton.gameObject.SetActive(false);
+        _backToCampButton.gameObject.SetActive(true);
 
         _backToCampText.gameObject.SetActive(true);
         _mainDeathText.gameObject.SetActive(true);
@@ -152,7 +156,7 @@ public class FloorTransition : MonoBehaviour
 
         yield return new WaitForSeconds(duration * 0.2f);
 
-        TutoManager.Instance.DisplayTutorial(11);
+        TutoManager.Instance.DisplayTutorial(12);
 
         Color saveColor = _flootCounterText.color;
         _flootCounterText.rectTransform.DOScale(Vector3.one * 1.4f, duration * 0.05f);

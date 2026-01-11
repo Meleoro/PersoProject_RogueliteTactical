@@ -33,6 +33,9 @@ public class Loot : MonoBehaviour, IInteractible
     [SerializeField] private float minAppearAddedX, maxAppearAddedX;
     [SerializeField] private float appearDuration;
 
+    [Header("Actions")]
+    public Action OnPlaceInInventory;    // For tuto
+
     [Header("Public Infos")]
     public LootData LootData { get { return lootData; } }
     public Image Image { get { return _image; } }
@@ -46,7 +49,6 @@ public class Loot : MonoBehaviour, IInteractible
     private bool isRotating;
     private bool isPlacedInInventory;
     private bool isSquishing;
-    private bool isOverlayed;
     private bool isEquipped;
     private Vector3 addedSize;
     private InventorySlot[] slotsOccupied;
@@ -86,18 +88,14 @@ public class Loot : MonoBehaviour, IInteractible
 
     private void Update()
     {
-        if (isPlacedInInventory) return;
-        if (isSquishing) return;
+        if (isPlacedInInventory || isSquishing) return;
 
         _imageBackground.rectTransform.position = Vector3.Lerp(_imageBackground.rectTransform.position, dragWantedPos, Time.deltaTime * dragLerpSpeed);
 
-        if (isOverlayed && !isDragged) return;
-
-        //DoMoveSquishEffect();
-
-        if (!isDragged) return;
-        
-        ManageDrag();
+        if (isDragged)
+        {
+            ManageDrag();
+        }
     }
 
 
@@ -113,6 +111,55 @@ public class Loot : MonoBehaviour, IInteractible
 
         if(!noAppear) StartCoroutine(AppearCoroutine());
     }
+
+
+    #region World Private Functions
+
+    private IEnumerator AppearCoroutine()
+    {
+        _collider.enabled = false;
+        float sign = Random.Range(0, 2) == 0 ? -1 : 1;
+
+        Vector2 finalPos = transform.position + new Vector3(Random.Range(minAppearAddedX, maxAppearAddedX) * sign, Random.Range(-minAppearAddedY, minAppearAddedY));
+
+        transform.UChangeLocalPosition(appearDuration, finalPos, CurveType.None);
+        _spriteRenderer.transform.UChangeLocalPosition(appearDuration * 0.6f, new Vector3(0, Random.Range(minAppearAddedY, maxAppearAddedY)), CurveType.EaseOutSin);
+        _spriteRenderer.material.SetColor("_Color", Color.black);
+        _spriteRenderer.material.ULerpMaterialColor(appearDuration * 0.8f, Color.white, "_Color");
+
+        _rays1SpriteRenderer.material.SetFloat("_MaxDistance", 0f);
+        _rays2SpriteRenderer.material.SetFloat("_MaxDistance", 0f);
+        _rays1SpriteRenderer.material.ULerpMaterialFloat(appearDuration * 0.6f, 0.5f, "_MaxDistance");
+        _rays2SpriteRenderer.material.ULerpMaterialFloat(appearDuration * 0.6f, 0.4f, "_MaxDistance");
+
+        yield return new WaitForSeconds(appearDuration * 0.6f);
+
+        _spriteRenderer.transform.UChangeLocalPosition(appearDuration * 0.4f, new Vector3(0, 0), CurveType.EaseInSin);
+        _rays1SpriteRenderer.material.ULerpMaterialFloat(appearDuration * 0.4f, 0.4f, "_MaxDistance");
+        _rays2SpriteRenderer.material.ULerpMaterialFloat(appearDuration * 0.4f, 0.3f, "_MaxDistance");
+
+        yield return new WaitForSeconds(appearDuration * 0.4f);
+
+        _collider.enabled = true;
+
+        StartCoroutine(IdleCoroutine());
+    }
+
+    private IEnumerator IdleCoroutine()
+    {
+        while (true)
+        {
+            _spriteRenderer.transform.UChangeLocalPosition(0.9f, new Vector3(0, -0.075f, 0), CurveType.EaseInOutSin);
+
+            yield return new WaitForSeconds(1f);
+
+            _spriteRenderer.transform.UChangeLocalPosition(0.9f, new Vector3(0, 0.075f, 0), CurveType.EaseInOutSin);
+
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    #endregion
 
 
     #region Become / Quit Inventory
@@ -413,6 +460,8 @@ public class Loot : MonoBehaviour, IInteractible
             slotsOccupied[i] = overlayedSlots[i];
         }
 
+        OnPlaceInInventory?.Invoke();
+
         position /= overlayedSlots.Count;
         _imageBackground.rectTransform.position = position;
         dragWantedPos = position;
@@ -437,8 +486,6 @@ public class Loot : MonoBehaviour, IInteractible
 
     public void OverlayLoot()
     {
-        isOverlayed = true;
-
         UIMetaManager.Instance.GenericDetailsPanel.LoadDetails(lootData, _imageBackground.transform.position, 
             CameraManager.Instance.Camera.WorldToViewportPoint(_image.rectTransform.position).x > 0.65f);
 
@@ -459,7 +506,6 @@ public class Loot : MonoBehaviour, IInteractible
 
     public void QuitOverlayLoot()
     {
-        isOverlayed = false;
         UIMetaManager.Instance.GenericDetailsPanel.HideDetails();
 
         if (overlayCoroutine is not null) StopCoroutine(overlayCoroutine);
@@ -493,55 +539,6 @@ public class Loot : MonoBehaviour, IInteractible
     #endregion
 
 
-    #region World Private Functions
-
-    private IEnumerator AppearCoroutine()
-    {
-        _collider.enabled = false;
-        float sign = Random.Range(0, 2) == 0 ? -1 : 1;
-
-        Vector2 finalPos = transform.position + new Vector3(Random.Range(minAppearAddedX, maxAppearAddedX) * sign, Random.Range(-minAppearAddedY, minAppearAddedY));
-
-        transform.UChangeLocalPosition(appearDuration, finalPos, CurveType.None);
-        _spriteRenderer.transform.UChangeLocalPosition(appearDuration * 0.6f, new Vector3(0, Random.Range(minAppearAddedY, maxAppearAddedY)), CurveType.EaseOutSin);
-        _spriteRenderer.material.SetColor("_Color", Color.black);
-        _spriteRenderer.material.ULerpMaterialColor(appearDuration * 0.8f, Color.white, "_Color");
-
-        _rays1SpriteRenderer.material.SetFloat("_MaxDistance", 0f);
-        _rays2SpriteRenderer.material.SetFloat("_MaxDistance", 0f);
-        _rays1SpriteRenderer.material.ULerpMaterialFloat(appearDuration * 0.6f, 0.5f, "_MaxDistance");
-        _rays2SpriteRenderer.material.ULerpMaterialFloat(appearDuration * 0.6f, 0.4f, "_MaxDistance");
-
-        yield return new WaitForSeconds(appearDuration * 0.6f);
-
-        _spriteRenderer.transform.UChangeLocalPosition(appearDuration * 0.4f, new Vector3(0, 0), CurveType.EaseInSin);
-        _rays1SpriteRenderer.material.ULerpMaterialFloat(appearDuration * 0.4f, 0.4f, "_MaxDistance");
-        _rays2SpriteRenderer.material.ULerpMaterialFloat(appearDuration * 0.4f, 0.3f, "_MaxDistance");
-
-        yield return new WaitForSeconds(appearDuration * 0.4f);
-
-        _collider.enabled = true;
-
-        StartCoroutine(IdleCoroutine());
-    }
-
-    private IEnumerator IdleCoroutine()
-    {
-        while (true)
-        {
-            _spriteRenderer.transform.UChangeLocalPosition(0.9f, new Vector3(0, -0.075f, 0), CurveType.EaseInOutSin);
-
-            yield return new WaitForSeconds(1f);
-
-            _spriteRenderer.transform.UChangeLocalPosition(0.9f, new Vector3(0, 0.075f, 0), CurveType.EaseInOutSin);
-
-            yield return new WaitForSeconds(1f);
-        }
-    }
-
-    #endregion
-
-
     #region Inventory Private Functions
 
     private IEnumerator RotateLootCoroutine(float duration, Quaternion finalRotation, Quaternion furtherFinalRotation)
@@ -556,22 +553,6 @@ public class Loot : MonoBehaviour, IInteractible
         yield return new WaitForSeconds(duration * 0.3f);
 
         isRotating = false;
-    }
-
-    private void DoMoveSquishEffect()
-    {
-        float ratio = _imageBackground.rectTransform.rect.width / _imageBackground.rectTransform.rect.height;
-
-        float difX = Mathf.Abs(dragWantedPos.x - _imageBackground.rectTransform.position.x) * 0.8f;
-        float difY = Mathf.Abs(dragWantedPos.y - _imageBackground.rectTransform.position.y) * 0.8f;
-        Vector2 addedSize = new Vector3(difX, difY);
-        float saveMagnitude = addedSize.magnitude;
-
-        addedSize = addedSize.RotateDirection(((Vector2)_imageBackground.rectTransform.right).GetAngleFromVector()) * saveMagnitude;
-        addedSize = new Vector3(Mathf.Clamp(addedSize.x, -1f, 1f), Mathf.Clamp(addedSize.y, -1f, 1f));
-
-        _imageBackground.rectTransform.localScale = Vector3.Lerp(_imageBackground.rectTransform.localScale, 
-            Vector3.one * 0.75f + (Vector3)addedSize * 0.5f + this.addedSize, Time.deltaTime * 10f);
     }
 
     private int GetOverlayedSlotsEmptyCount(List<InventorySlot> overlayedSlots)

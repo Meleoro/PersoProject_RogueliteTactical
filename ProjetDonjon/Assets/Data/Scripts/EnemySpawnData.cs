@@ -5,6 +5,11 @@ using UnityEngine;
 public class EnemySpawnData : ScriptableObject
 {
     public EnemySpawn[] possibleEnemies;
+    public EnemySpawn[] possibleChallengeEnemies;
+    public int minDangerAmountPerBattle;
+    public int maxDangerAmountPerBattle;
+    public int minDangerAmountPerChallenge;
+    public int maxDangerAmountPerChallenge;
 }
 
 [Serializable]

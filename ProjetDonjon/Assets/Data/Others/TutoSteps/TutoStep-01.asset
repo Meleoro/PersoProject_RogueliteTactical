@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54eb52480f4ee644b8b52d78c02128a5, type: 3}
   m_Name: TutoStep-01
   m_EditorClassIdentifier: Assembly-CSharp::TutoStepData
-  stepName: MOVEMENT
-  stepDescription: 'WELCOME INTO THE DUNGEON !
+  stepName: CHESTS
+  stepDescription: 'DURING YOUR EXPLORATION, YOU WILL FIND LOTS OF TREASURES !
 
 
-    YOU CAN USE THE KEYS [ZQSD]
-    TO MOVE AROUND [SPACE] TO JUMP.'
+    YOU
+    CAN PRESS [E] TO INTERACT WITH IT.'
   highlightType: 0
-  endCondition: 1
+  endCondition: 4
   leftSidePanel: 1
-  playNextStepOnFinished: 0
-  playNextStepDelay: 0.2
+  playNextStepOnFinished: 1
+  playNextStepDelay: 1

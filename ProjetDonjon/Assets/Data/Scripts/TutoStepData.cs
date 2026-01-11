@@ -27,7 +27,8 @@ public enum TutoEndCondition
     ClickEnemy,
     AddShield,
     ReturnToCamp,
-    EquipEquiment
+    EquipEquiment,
+    PlaceItemInInventory
 }
 
 
